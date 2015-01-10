@@ -1,0 +1,5 @@
+This is stuff I typed into a file
+It is really cooool stuff.
+Lots and lots of fun to have in here.
+
+我是来测试能不能输出中文 # 中文输出有误

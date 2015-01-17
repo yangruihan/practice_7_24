@@ -15,7 +15,8 @@ ROS has two types of names:
 	1.Package Resource Names
 	2.Graph Resource Names
 
-1.ROS Filesystem Level
+1.ROS Filesystem Level:
+
 	Packages:
 		Packages are the main unit for organizing software in ROS. 
 		A Package may contain: (1)ROS runtime processes(nodes)
@@ -43,6 +44,7 @@ ROS has two types of names:
 
 
 2.ROS Computation Graph Level:
+
 	The Computation Graph is the peer-to-peer network of ROS processes that are processing data together. The basic Computation Graph concepts of ROS are (nodes, Master, Parameter Server, messages, services, topics, and bags), all of which provide data to the Graph in different ways.
 
 	These concepts are implemented in the ros_comm repository	http://wiki.ros.org/ros_comm
@@ -71,6 +73,29 @@ ROS has two types of names:
 	Bags:
 		Bags are a format for saving and playing back ROS message data. Bags are an important mechanism for storing data, such as sensor data, that can be difficult to collect but is necessary for developing and testing algorithms.
 
+
+3.ROS Community Level:
+
+	Distributions:
+		ROS Distributions are collections of versioned stacks that you can install. Distributions play a similar role to Linux distributions: they make it easier to install a collection of software, and they also maintain consistent versions across a set of software.
+
+	Repositories:
+		ROS relies on a federated network of code repositories, where different institutions can develop and release their own robot software components.
+
+	The ROS Wiki:
+		The ROS community Wiki is the main forum for documenting information about ROS. Anyone can sign up for an account and contribute their own documentation, provide corrections or updates, write tutorials, and more.
+
+	Bug Ticket System:
+		http://wiki.ros.org/Tickets
+
+	Mailing Lists:
+		The ros-users mailing list is the primary communication channel about new updates to ROS, as well as a forum to ask questions about ROS software
+
+	ROS Answers:
+		A Q&A site for answering your ROS-related questions.
+
+	Blog:
+		The Willow Garage Blog provides regular updates, including photos and videos.
 
 
 

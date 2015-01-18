@@ -1,0 +1,92 @@
+# Filesystem Tools
+	
+	# Using rospack
+	rospack allows you to get information about packages.
+		
+		* rospack find [package_name] 
+		(return the path to package)
+		* example:
+			$ rospack find roscpp
+			return:
+			/opt/ros/hydro/share/roscpp
+			
+	# Using roscd
+	roscd is part of the rosbash suite. It allows you to change directory (cd) directly to a package or a stack. 
+	
+		* roscd [locationname[/subdir]]
+		* example:
+			$ roscd roscpp
+			$ pwd
+			return:
+			/opt/ros/hydro/share/roscpp
+			
+	# roscd log
+	roscd log will take you to the folder where ROS stores log files.
+	
+	# Using rosls
+	rosls is part of the rosbash suite. It allows you to ls directly in a package by name rather than by absolute path.
+	
+		* rosls [locationname[/subdir]
+		* example:
+			$ rosls roscpp_tutorials
+			return:
+			cmake  package.xml  srv
+			
+	# Tab Completion
+
+			
+
+			
+			
+			
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

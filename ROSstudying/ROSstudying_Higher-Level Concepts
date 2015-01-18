@@ -1,56 +1,70 @@
-4.Names
+Higher_Level Concepts
 
-	4.1 Graph Resource Names
+There are several stacks, such as common, common_msgs, and geometry, that provide these higher-level concepts for use with ROS and are described below.
 
-		4.1.1 Valid Names
-			A valid name has the following characteristics:
-				1. First character is an alpha character([a-z|A-Z]), tilde(~) or forward slash(/)
-				2.Subsequent characters can be alphanumeric([0-9|a-z|A-Z]), underscores(_), or forward slashes(/)
+1.Coordinate Frames/Transforms
+	The tf package provides a distributed(分布式), ROS-based framework for calculating the positions of multiple coordinate(协调) frames over time.
 
-				Exception:base names(described below) cannot have forward slashes(/) or tildes(~) in them
+2.Actions/Tasks
+	The actionlib package defines a common, topic-based interface for preemptible(抢占) tasks in ROS.
 
-		4.1.2 Resolving
-			There are four types of Graph Resource Names in ROS:(base, relative, global, private), which have the following syntax:
+3. Message 
+	The common_msgs stack provide a base message ontology(消息体) for robotic systems. It defines several classes of messages, including:
 
-				base
-				relative/name
-				/global/name
-				~private/name
+		actionlib_msgs:messages for representing actions.
+		diagnostic_msgs:messages for sending diagnostic(诊断) data.
+		geometry_msgs:messages for representing common geometric primitives(几何图元).
+		nav_msgs:messages for navigation(导航).
+		sensor_msgs:messages for representing sensor data.
 
-			Names with no namespace qualifiers whatsoever are base names. Base names are most frequently used to initialize the node name.
+4.Plugins
+	pluginlib provides a library for dynamically loading libraries in C++ code.
 
-			Names that start with a "/" are global -- they are considered fully resolved. Global names should be avoided as much as possilble as they limit code protability.
+5.Filters
+	The filters package provides a C++ library for processing data using a sequence of filters.
 
-			Names that start with a "~" are private. They convert the node's name into a namespace. For example, node1 in namespace /wg/ has the private namespace /wg/node1. Private names are useful for passing parameters to a specific node via the parameter server. 
-
-			Here are some name resolution examples:
-
-			Node 		Relative(default) 		Global 					Private
-			/node1 		bar -> /bar 			/bar -> /bar			~bar -> /node1/bar
-			/wg/node2	bar -> /wg/bar 			/bar -> /bar 			~bar -> /wg/node2/bar
-			/wg/node3	foo/bar -> /wg/foo/bar	/foo/bar -> /foo/bar	~foo/bar -> /wg/node3/foo/bar
-
-		4.1.3 Remapping
-			Any name within a ROS Node can be remapped when the Node is launched at the command-line.
+6.Robot Model
+	The urdf package defines an XML format for representing a robot model and provides a C++ parser(解析器).
 
 
-	4.2 Package Resource Names
 
-		Package Resource Names are very simple: they are just the name of Package that the resource is in plus the name of the resource. For example, the name "std_msgs/String" refers to the "String" message type in the "std_msgs" Package.
 
-		Some of the ROS-related files that may be referred to using Package Resource Names include:
 
-			Message(msg) types
-			Service(srv) types
-			Node types
 
-		4.2.1 Valid Names
 
-			A ROS package cannot have special characters other than an underscore, and must start with an alphabetical character. A valid name has the following characteristics:
 
-				1.First character is an alpha character([a-z|A-Z])
-				2.Subsequent characters can be alphanumeric([0-9|a-z|A-Z]), underscores(_) or a forward slash(/)
-				3.There is at most one forward slash('/').
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

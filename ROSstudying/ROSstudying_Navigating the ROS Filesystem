@@ -33,7 +33,20 @@
 			cmake  package.xml  srv
 			
 	# Tab Completion
-
+	like Linux command-line, TAB can help you to complete an entire package name.
+		
+		* example:
+			roscd roscpp_tut<<< now push the TAB key>>>
+			After pushing the TAB key, the command line should fill out the rest:
+			roscd roscpp_tutorials/
+			
+			
+# You may have noticed a pattern with the naming of the ROS tools:
+	
+	rospack = ros + pack(age)
+	roscd = ros + cd
+	rosls = ros + ls
+			
 			
 
 			

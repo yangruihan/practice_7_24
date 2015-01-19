@@ -1,0 +1,155 @@
+# Creating a ROS Package
+
+
+# Catkin Package	
+	
+	A catkin package must meet a few requirements:
+		* The package must contain a catkin compliant package.xml file
+			That package.xml file provides meta information about the package
+		* The package must contain a CMakeLists.txt which uses catkin. Catkin metapackages must have a boilerplate CMakeLists.txt file
+		* There can be no more than one package in each folder
+			This means no nested packages nor multiple packages sharing the same directory
+				
+	The simplest possible package might look like this:
+		
+		my_package/
+			CMakeLists.txt
+			package.xml
+
+			
+# Packages in a catkin Workspace
+	The recommended method of working with catkin packages is using a catkin workspace, but you can also build catkin packages standalone. A trivial workspace might look like this:
+	
+	workspace_folder/        -- WORKSPACE
+  		src/                   -- SOURCE SPACE
+    		CMakeLists.txt       -- 'Toplevel' CMake file, provided by catkin
+    		package_1/
+      			CMakeLists.txt     -- CMakeLists.txt file for package_1
+      			package.xml        -- Package manifest for package_1
+    		...
+   		 	package_n/
+    		  	CMakeLists.txt     -- CMakeLists.txt file for package_n
+      			package.xml        -- Package manifest for package_n
+
+
+# Creating a catkin Package
+	1. Change to the source space directory of the catkin workspace you created.
+		ex: cd ~/catkin_ws/src
+	2. Now use the catkin_create_pkg script to create a new package called 'beginner_tutorials' which depends on std_msgs, roscpp, and rospy.
+		ex: catkin_create_pkg beginner_tutorials std_msgs rospy roscpp
+	
+		This will create a beginner_tutorials folder which contains a package.xml and a CMakeLists.txt, which have been partially filled out with the information you gave catkin_create_pkg. 
+
+		catkin_create_pkg requires that you give it a package_name and optionally a list of dependencies on which that package depends: 
+		
+		catkin_create_pkg <package_name> [depend1] [depend2] [depend3]
+
+# Building a catkin workspace and sourcing the setup file
+	Now you need to build the packages in the catkin workspace:
+		cd ~/catkin_ws
+		catkin_make
+
+	After the workspace has been built it has created a similar structure in the devel subfolder as you usually find under /opt/ros/$ROSDISTRO_NAME.
+
+	To add the workspace to your ROS environment you need to source the generated setup file:
+		. ~/catkin_ws/devel/setup.bash
+
+	
+# Package dependencies
+
+	# First-order dependencies
+	
+		ex: rospack depends1 beginner_tutorials
+		return:
+			std_msgs
+			rospy
+			roscpp
+	
+		As you can see, rospack lists the same dependencies that were used as arguments when running catkin_create_pkg. These dependencies for a package are stored in the package.xml file:
+		
+		ex: roscd beginner_tutorials
+			cat package.xml
+
+	# Indirect(间接) dependencies
+		In many cases, a dependency will also have its own dependencies. For instance, rospy has other dependencies. 
+
+		ex: rospack depends1 rospy
+		return:
+			genpy
+			rosgraph
+			rosgraph_msgs
+			roslib
+			std_msgs
+			
+		A package can have quite a few indirect dependencies. Luckily rospack can recursively determine all nested dependencies. 
+		
+		ex: rospack depends beginner_tutorials
+		return:
+			cpp_common
+			rostime
+			roscpp_traits
+			roscpp_serialization
+			genmsg
+			genpy
+			message_runtime
+			rosconsole
+			std_msgs
+			rosgraph_msgs
+			xmlrpcpp
+			roscpp
+			rosgraph
+			catkin
+			rospack
+			roslib
+			rospy
+
+
+# Customizing Your Package
+		
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+# Building a ROS Package
+
+
+# Building Packages
+
+	Using catkin_make
+		
+		catkin_make [make_targets] [-DCMAKE_VARIABLES=...]
+		
+		catkin_make
+		catkin_make install  # (optionally)
+		The above commands will build any catkin projects found in the src folder. 
+		

@@ -1,0 +1,2 @@
+Chinese:这是一个测试文档
+English:This is a test document.

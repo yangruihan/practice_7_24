@@ -48,7 +48,7 @@
 	
 # roslaunch [package] [filename.launch]
 	
-	
+# rosmsg show [message type]	
 		
 		
 	

@@ -15,49 +15,11 @@
 
 # rosservice
 	Services are another way that nodes can communicate with each other.
-	Services allow nodes to send a request and receive a response.
 
 	rosservice list         print information about active services
 	rosservice call         call the service with the provided args
 	rosservice type         print service type
 	rosservice find         find services by service type
 	rosservice uri          print service ROSRPC uri
-	
-# rosparam
-	rosparam set            set parameter
-	rosparam get            get parameter
-	rosparam load           load parameters from file
-	rosparam dump           dump parameters to file
-	rosparam delete         delete parameter
-	rosparam list           list parameter names	
-	
-# rosrun rqt_console rqt_console
-可以看到当前节点放出的参数的信息
 
-# rosrun rqt_logger_level rqt_logger_level
-可以选择rqt_console 中显示的信息的等级
-	
-	Logging levels are prioritized in the following order:
-		Fatal
-		Error
-		Warn
-		Info
-		Debug
-	By setting the logger level, you will get all messages of that priority level or higher.
-	For example, by setting the level to Warn, you will get all Warn, Error, and Fatal logging messages.
-	
-# roslaunch [package] [filename.launch]
-	
-	
-		
-		
-	
-
-
-	
-	
-	
-	
-	
-	
-	
+# Using rosed to edit files in ROS

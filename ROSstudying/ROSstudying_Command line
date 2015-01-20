@@ -1,0 +1,23 @@
+# rosrun rqt_graph rqt_graph
+看到当前对应的node以及它们的相互联系的topic
+
+# rostopic
+	Nodes communicate with each other by sending message which has the same topic.
+
+	rostopic bw			display bandwidth used by topic
+	rostopic echo		print messages to screen
+	rostopic find		find topics by type
+	rostopic hz			display publishing rate of topic    
+	rostopic info		print information about active topic
+	rostopic list		list active topics
+	rostopic pub		publish data to topic
+	rostopic type		print topic type
+
+# rosservice
+	Services are another way that nodes can communicate with each other.
+
+	rosservice list         print information about active services
+	rosservice call         call the service with the provided args
+	rosservice type         print service type
+	rosservice find         find services by service type
+	rosservice uri          print service ROSRPC uri

@@ -50,11 +50,14 @@
 	
 # rosmsg show [message type]	
 		
-		
+# roscp [package_name] [file_to_copy_path] [copy_path]
 	
+# rossrv show <service type>
 
+# rosbag record 
+记录topic publish的信息，以.bag的形式
 
-	
+# rosbag info <your bagfile>
 	
 	
 	

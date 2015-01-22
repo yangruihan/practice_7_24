@@ -1,0 +1,22 @@
+roslaunch rbx1_vision openni_node.launch
+# 连接摄像设备
+
+OR 
+
+roslaunch rbx1_vision uvc_cam.launch device:=/dev/video0
+# 切换摄像设备
+
+roslaunch rbx1_vision face_tracker2.launch
+# 启动人脸追踪节点
+
+roslaunch rbx1_apps object_tracker.launch
+# 启动物体追踪节点
+
+rqt_plot /cmd_vel/angular/z
+# 启动数据监测
+
+roslaunch rbx1_bringup fake_turtlebot.launch
+# 连接虚拟机器人节点
+
+rosrun rviz rviz -d `rospack find rbx1_nav`/sim.rviz
+# 启动RViz 虚拟机器人

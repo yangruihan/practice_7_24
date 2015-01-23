@@ -1,0 +1,30 @@
+/**
+ * Filename:"Date.java"
+ * Author:"Yang Ruihan"
+ * Time:2015-1-23
+ **/
+
+package Friends;
+
+public class Date {
+	
+	/**
+	 * ClassName:Date
+	 **/
+	 
+	private int year;
+	private int month;
+	private int day;
+	
+	public Date(int year, int month, int day) {
+		this.year = year;
+		this.month = month;
+		this.day = day;
+	}
+	
+	int getYear() {
+		
+	}
+}
+
+

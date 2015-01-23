@@ -22,6 +22,11 @@ public class Date {
 		this.day = day;
 	}
 
+	@Override
+	public String toString() {
+		return this.year + "-" + this.month + "-" + this.day;
+	}
+
 	// //////////////////////////////////////////////////////////////////
 	//
 	// get && set ·½·¨

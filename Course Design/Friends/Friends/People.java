@@ -12,12 +12,6 @@ public class People {
 	 **/
 
 	public static int PEOPLE_NUMBER = 0; 		// the number of people in address list
-//	public static int COL_CLM = 1; 				// college classmates
-//	public static int HI_CLM = COL_CLM + 1; 	// high school classmates
-//	public static int FAM = HI_CLM + 1; 		// family member 
-//	public static int FRI = FAM + 1; 			// friends
-//	public static int TEA = FRI + 1; 			// teachers 
-//	public static int RES = TEA + 1; 			// reservation
 
 	private int IDNumber; 			// ID of the student
 	private String name; 			// name of the student
@@ -28,14 +22,16 @@ public class People {
 	private String phoneNum2; 		// second phone number of the student
 	private String phoneNum3; 		// third phone number of the student 
 	private String location; 		// current location of the student 
+	private String gender;
 	private int group; 				// group of the student
 
-	public People(int group, String name, Date birthday, String phone_num1,
+	public People(int group, String name, String gender, Date birthday, String phone_num1,
 			String phone_num2, String phone_num3, String location) {
 		PEOPLE_NUMBER++; // ID 
 		this.group = group;
 		this.IDNumber = PEOPLE_NUMBER;
 		this.name = name;
+		this.gender = gender;
 		this.birthday = birthday;
 		this.phoneNum1 = phone_num1;
 		this.phoneNum2 = phone_num2;
@@ -45,14 +41,14 @@ public class People {
 		this.nameHeadChar = getNameHeadChar();
 	}
 
-	public People(int group, String name, Date birthday, String phone_num1,
+	public People(int group, String name, String gender, Date birthday, String phone_num1,
 			String phone_num2, String location) {
-		this(group, name, birthday, phone_num1, phone_num2, "NULL", location);
+		this(group, name, gender, birthday, phone_num1, phone_num2, "NULL", location);
 	}
 
-	public People(int group, String name, Date birthday, String phone_num1,
+	public People(int group, String name, String gender, Date birthday, String phone_num1,
 			String location) {
-		this(group, name, birthday, phone_num1, "NULL", location);
+		this(group, name, gender, birthday, phone_num1, "NULL", location);
 	}
 
 	// Cn to pinyin
@@ -69,23 +65,31 @@ public class People {
 	public String toString() {
 		return "------------------------------\n" +
 				   "ID:" + this.IDNumber+" " +
-				   "\tName:" + this.name + "\n" + 
-				   "\tName(Pinyin):" + this.namePinyin + "\n" +
-				   "\tName(HeadChar):" + this.nameHeadChar.toUpperCase() + "\n" +
-				   "\tBirth:" + this.birthday.toString() + "\n" + 
-				   "\tPhone 1:" + this.phoneNum1 + "\n" + 
-				   "\tPhone 2:" + this.phoneNum2 + "\n" + 
-				   "\tPhone 3:" + this.phoneNum3 + "\n" + 
-				   "\tCurrent Location:" + this.location +
+				   "\t姓名：" + this.name + "\n" + 
+				   "\t性别：" + this.gender + "\n" +
+				   "\t生日：" + this.birthday.toString() + "\n" + 
+				   "\t电话号码 1：" + this.phoneNum1 + "\n" + 
+				   "\t电话号码 2：" + this.phoneNum2 + "\n" + 
+				   "\t电话号码 3：" + this.phoneNum3 + "\n" + 
+				   "\t所在地：" + this.location +
 				   "\n------------------------------\n";
 	}
 	
 	// //////////////////////////////////////////////////////////////////
 	//
 	// get && set methods
+	
 
 	public static int getPEOPLE_NUMBER() {
 		return PEOPLE_NUMBER;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public static void setPEOPLE_NUMBER(int pEOPLE_NUMBER) {

@@ -61,7 +61,7 @@ public class ReadFromFile {
 			String tempString = null;
 			int line = 1;
 			while ((tempString = reader.readLine()) != null) {
-				System.out.println("line" + line + ":" + tempString);
+				System.out.println("line " + line + " : " + tempString);
 				line++;
 			}
 		} catch (IOException e) {

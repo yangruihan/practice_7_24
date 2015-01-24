@@ -29,10 +29,10 @@ public class People {
 	private String location; 		// current location of the student 
 	private int group; 				// group of the student
 
-	public People(String name, Date birthday, String phone_num1,
-			String phone_num2, String phone_num3, String location, int group) {
+	public People(int group, String name, Date birthday, String phone_num1,
+			String phone_num2, String phone_num3, String location) {
 		PEOPLE_NUMBER++; // ID 
-
+		this.group = group;
 		this.ID_number = PEOPLE_NUMBER;
 		this.name = name;
 		this.birthday = birthday;
@@ -40,18 +40,17 @@ public class People {
 		this.phone_num2 = phone_num2;
 		this.phone_num3 = phone_num3;
 		this.location = location;
-		this.group = group;
 		calNamePinyin();
 	}
 
-	public People(String name, Date birthday, String phone_num1,
-			String phone_num2, String location, int group) {
-		this(name, birthday, phone_num1, phone_num2, "NULL", location, group);
+	public People(int group, String name, Date birthday, String phone_num1,
+			String phone_num2, String location) {
+		this(group, name, birthday, phone_num1, phone_num2, "NULL", location);
 	}
 
-	public People(String name, Date birthday, String phone_num1,
-			String location, int group) {
-		this(name, birthday, phone_num1, "NULL", location, group);
+	public People(int group, String name, Date birthday, String phone_num1,
+			String location) {
+		this(group, name, birthday, phone_num1, "NULL", location);
 	}
 
 	// Cn to pinyin

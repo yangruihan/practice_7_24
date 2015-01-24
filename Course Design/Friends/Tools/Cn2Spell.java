@@ -24,6 +24,7 @@ public class Cn2Spell {
 
 	/**
 	 * 到中文的ASCII
+	 * 
 	 * @param cn
 	 * @return
 	 */
@@ -32,20 +33,21 @@ public class Cn2Spell {
 		if (bytes == null || bytes.length > 2 || bytes.length <= 0) { // ����
 			return 0;
 		}
-		if (bytes.length == 1) { // Ӣ���ַ�
+		if (bytes.length == 1) {
 			return bytes[0];
 		}
-		if (bytes.length == 2) { // �����ַ�
+		if (bytes.length == 2) {
 			int hightByte = 256 + bytes[0];
 			int lowByte = 256 + bytes[1];
 			int ascii = (256 * hightByte + lowByte) - 256 * 256;
 			return ascii;
 		}
-		return 0; // ����
+		return 0;
 	}
 
 	/**
 	 * 获得名字的拼音
+	 * 
 	 * @param cnStr
 	 * @return
 	 */
@@ -58,7 +60,7 @@ public class Cn2Spell {
 		StringBuffer retuBuf = new StringBuffer();
 		for (int i = 0, Len = chars.length; i < Len; i++) {
 			int ascii = getCnAscii(chars[i]);
-			if (ascii == 0) { // ȡasciiʱ����
+			if (ascii == 0) {
 				retuBuf.append(chars[i]);
 			} else {
 				String spell = getSpellByAscii(ascii);
@@ -66,24 +68,25 @@ public class Cn2Spell {
 					retuBuf.append(chars[i]);
 				} else {
 					retuBuf.append(spell);
-				} // end of if spell == null
-			} // end of if ascii <= -20400
-		} // end of for
+				}
+			}
+		}
 
 		return retuBuf.toString();
 	}
 
 	/**
 	 * 通过ASCII 得到中文拼音
+	 * 
 	 * @param ascii
 	 * @return
 	 */
 	private static String getSpellByAscii(int ascii) {
-		if (ascii > 0 && ascii < 160) { // ���ַ�
+		if (ascii > 0 && ascii < 160) {
 			return String.valueOf((char) ascii);
 		}
 
-		if (ascii < -20319 || ascii > -10247) { // ��֪�����ַ�
+		if (ascii < -20319 || ascii > -10247) {
 			return null;
 		}
 
@@ -102,7 +105,7 @@ public class Cn2Spell {
 			if (valObj instanceof Integer) {
 				asciiRang = ((Integer) valObj).intValue();
 
-				if (ascii >= asciiRang0 && ascii < asciiRang) { // �����ҵ�
+				if (ascii >= asciiRang0 && ascii < asciiRang) {
 					return (spell0 == null) ? spell : spell0;
 				} else {
 					spell0 = spell;

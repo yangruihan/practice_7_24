@@ -61,15 +61,15 @@ public class People {
 
 	@Override
 	public String toString() {
-		return "��ţ�" + this.ID_number+"\n" +
-				   "������" + this.name + "\n" + 
-				   "ƴ����" + this.name_pinyin + "\n" + 
-				   "���գ�" + this.birthday.toString() + "\n" + 
-				   "�绰����1��" + this.phone_num1 + "\n" + 
-				   "�绰����2��" + this.phone_num2 + "\n" + 
-				   "�绰����3��" + this.phone_num3 + "\n" + 
-				   "���ڵأ�" + this.location + "\n" + 
-				   "���飺" + this.group;
+		return "ID:" + this.ID_number+"\n" +
+				   "Name:" + this.name + "\n" + 
+				   "Name(Pinyin):" + this.name_pinyin + "\n" + 
+				   "Birth:" + this.birthday.toString() + "\n" + 
+				   "Phone 1:" + this.phone_num1 + "\n" + 
+				   "Phone 2:" + this.phone_num2 + "\n" + 
+				   "Phone 3:" + this.phone_num3 + "\n" + 
+				   "Current Location:" + this.location + "\n" + 
+				   "Group" + this.group;
 	}
 
 	// //////////////////////////////////////////////////////////////////

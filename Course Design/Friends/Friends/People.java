@@ -12,20 +12,21 @@ public class People {
 	 **/
 
 	public static int PEOPLE_NUMBER = 0; 		// the number of people in address list
-	public static int COL_CLM = 1; 				// college classmates
-	public static int HI_CLM = COL_CLM + 1; 	// high school classmates
-	public static int FAM = HI_CLM + 1; 		// family member 
-	public static int FRI = FAM + 1; 			// friends
-	public static int TEA = FRI + 1; 			// teachers 
-	public static int RES = TEA + 1; 			// reservation
+//	public static int COL_CLM = 1; 				// college classmates
+//	public static int HI_CLM = COL_CLM + 1; 	// high school classmates
+//	public static int FAM = HI_CLM + 1; 		// family member 
+//	public static int FRI = FAM + 1; 			// friends
+//	public static int TEA = FRI + 1; 			// teachers 
+//	public static int RES = TEA + 1; 			// reservation
 
-	private int ID_number; 			// ID of the student
+	private int IDNumber; 			// ID of the student
 	private String name; 			// name of the student
-	private String name_pinyin; 	// name's pinyin of the student
+	private String namePinyin; 	// name's pinyin of the student
+	private String nameHeadChar;	// name's head char
 	private Date birthday; 			// birthday of the student
-	private String phone_num1; 		// first phone number of the student
-	private String phone_num2; 		// second phone number of the student
-	private String phone_num3; 		// third phone number of the student 
+	private String phoneNum1; 		// first phone number of the student
+	private String phoneNum2; 		// second phone number of the student
+	private String phoneNum3; 		// third phone number of the student 
 	private String location; 		// current location of the student 
 	private int group; 				// group of the student
 
@@ -33,14 +34,15 @@ public class People {
 			String phone_num2, String phone_num3, String location) {
 		PEOPLE_NUMBER++; // ID 
 		this.group = group;
-		this.ID_number = PEOPLE_NUMBER;
+		this.IDNumber = PEOPLE_NUMBER;
 		this.name = name;
 		this.birthday = birthday;
-		this.phone_num1 = phone_num1;
-		this.phone_num2 = phone_num2;
-		this.phone_num3 = phone_num3;
+		this.phoneNum1 = phone_num1;
+		this.phoneNum2 = phone_num2;
+		this.phoneNum3 = phone_num3;
 		this.location = location;
-		calNamePinyin();
+		this.namePinyin = calNamePinyin();
+		this.nameHeadChar = getNameHeadChar();
 	}
 
 	public People(int group, String name, Date birthday, String phone_num1,
@@ -54,26 +56,60 @@ public class People {
 	}
 
 	// Cn to pinyin
-	private void calNamePinyin() {
-		this.name_pinyin = Tools.Cn2Spell.getFullSpell(this.name);
+	private String calNamePinyin() {
+		return Tools.CnToSpell.getPinYin(this.name);
+	}
+	
+	// get name pinyin head char
+	private String getNameHeadChar() {
+		return Tools.CnToSpell.getPinYinHeadChar(this.name);
 	}
 
 	@Override
 	public String toString() {
-		return "ID:" + this.ID_number+"\n" +
-				   "Name:" + this.name + "\n" + 
-				   "Name(Pinyin):" + this.name_pinyin + "\n" + 
-				   "Birth:" + this.birthday.toString() + "\n" + 
-				   "Phone 1:" + this.phone_num1 + "\n" + 
-				   "Phone 2:" + this.phone_num2 + "\n" + 
-				   "Phone 3:" + this.phone_num3 + "\n" + 
-				   "Current Location:" + this.location + "\n" + 
-				   "Group" + this.group;
+		return "------------------------------\n" +
+				   "ID:" + this.IDNumber+" " +
+				   "\tName:" + this.name + "\n" + 
+				   "\tName(Pinyin):" + this.namePinyin + "\n" +
+				   "\tName(HeadChar):" + this.nameHeadChar.toUpperCase() + "\n" +
+				   "\tBirth:" + this.birthday.toString() + "\n" + 
+				   "\tPhone 1:" + this.phoneNum1 + "\n" + 
+				   "\tPhone 2:" + this.phoneNum2 + "\n" + 
+				   "\tPhone 3:" + this.phoneNum3 + "\n" + 
+				   "\tCurrent Location:" + this.location +
+				   "\n------------------------------\n";
 	}
-
+	
 	// //////////////////////////////////////////////////////////////////
 	//
 	// get && set methods
+
+	public static int getPEOPLE_NUMBER() {
+		return PEOPLE_NUMBER;
+	}
+
+	public static void setPEOPLE_NUMBER(int pEOPLE_NUMBER) {
+		PEOPLE_NUMBER = pEOPLE_NUMBER;
+	}
+
+	public int getIDNumber() {
+		return IDNumber;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+		this.nameHeadChar = getNameHeadChar();
+		this.namePinyin = calNamePinyin();
+	}
+
+	public String getNamePinyin() {
+		return namePinyin;
+	}
+
 	public Date getBirthday() {
 		return birthday;
 	}
@@ -82,28 +118,28 @@ public class People {
 		this.birthday = birthday;
 	}
 
-	public String getPhone_num1() {
-		return phone_num1;
+	public String getPhoneNum1() {
+		return phoneNum1;
 	}
 
-	public void setPhone_num1(String phone_num1) {
-		this.phone_num1 = phone_num1;
+	public void setPhoneNum1(String phoneNum1) {
+		this.phoneNum1 = phoneNum1;
 	}
 
-	public String getPhone_num2() {
-		return phone_num2;
+	public String getPhoneNum2() {
+		return phoneNum2;
 	}
 
-	public void setPhone_num2(String phone_num2) {
-		this.phone_num2 = phone_num2;
+	public void setPhoneNum2(String phoneNum2) {
+		this.phoneNum2 = phoneNum2;
 	}
 
-	public String getPhone_num3() {
-		return phone_num3;
+	public String getPhoneNum3() {
+		return phoneNum3;
 	}
 
-	public void setPhone_num3(String phone_num3) {
-		this.phone_num3 = phone_num3;
+	public void setPhoneNum3(String phoneNum3) {
+		this.phoneNum3 = phoneNum3;
 	}
 
 	public String getLocation() {
@@ -121,18 +157,4 @@ public class People {
 	public void setGroup(int group) {
 		this.group = group;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-		calNamePinyin();
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public String getNamePinyin() {
-		return this.name_pinyin;
-	}
-
 }

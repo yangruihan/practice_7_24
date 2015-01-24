@@ -17,6 +17,11 @@ public class Client {
 		System.out.println("------------- 个人通讯录 -------------");
 		System.out
 				.println("                                          By Y.R.H\n");
+		
+		People people = new People(1, "小明", new Date(1995,3,6), "15671651459", "武汉");
+		
+		System.out.println(people.toString());
+		System.out.println(Tools.CnToSpell.getPinYin("小明"));
 
 		String fileName = "Address List.txt";
 		Tools.ReadFromFile.readFileByLines(fileName);

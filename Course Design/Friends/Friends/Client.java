@@ -2,10 +2,11 @@ package Friends;
 
 public class Client {
 
-	public static int MAIN_MENU = 1001; // Ö÷²Ëµ¥±àºÅ
-	public static int IMPORT = 1002; // µ¼ÈëÍ¨Ñ¶Â¼
-	public static int SHOW = 1003; // ÏÔÊ¾Í¨Ñ¶Â¼
-	public static int SEARCH = 1004; // ²éÕÒ
+	// ä»»åŠ¡ç¼–å·
+	public static int MAIN_MENU = 1001; // ä¸»ç•Œé¢
+	public static int IMPORT = 1002; // å¯¼å…¥é€šè®¯å½•
+	public static int SHOW = 1003;  // æ˜¾ç¤ºé€šè®¯å½•
+	public static int SEARCH = 1004; // æŸ¥æ‰¾
 
 	public Client() {
 
@@ -13,18 +14,10 @@ public class Client {
 
 	public static void main(String[] args) {
 
-		System.out.println("------------- ¸öÈËÍ¨Ñ¶Â¼ -------------");
+		System.out.println("------------- ä¸ªäººé€šè®¯å½• -------------");
 		System.out
 				.println("                                          By Y.R.H\n");
-		System.out.println("1.  µ¼ÈëÍ¨Ñ¶Â¼");
-		System.out.println("2.  ÏÔÊ¾Í¨Ñ¶Â¼");
-		System.out.println("3.  ²éÕÒ");
-		System.out.println("4.  ĞŞ¸ÄÍ¨Ñ¶Â¼");
 
-		Date date = new Date(1995, 9, 23);
-		People people = new People("î£", date, "15671651459", "¹È³Ç", People.FAM);
-		System.out.println(people.getName());
-		System.out.println(people.toString());
 
 	}
 }

@@ -11,28 +11,27 @@ public class People {
 	 * ClassName:People
 	 **/
 
-	public static int PEOPLE_NUMBER = 0; // ÈËÊı±àºÅ
-	public static int COL_CLM = 1; // ´óÑ§Í¬Ñ§
-	public static int HI_CLM = COL_CLM + 1; // ¸ßÖĞÍ¬Ñ§
-	public static int FAM = HI_CLM + 1; // ¼ÒÈË
-	public static int FRI = FAM + 1; // ÅóÓÑ
-	public static int TEA = FRI + 1; // ÀÏÊ¦
-	public static int RES = TEA + 1; // ¶©²Í
+	public static int PEOPLE_NUMBER = 0; 		// the number of people in address list
+	public static int COL_CLM = 1; 				// college classmates
+	public static int HI_CLM = COL_CLM + 1; 	// high school classmates
+	public static int FAM = HI_CLM + 1; 		// family member 
+	public static int FRI = FAM + 1; 			// friends
+	public static int TEA = FRI + 1; 			// teachers 
+	public static int RES = TEA + 1; 			// reservation
 
-	private int ID_number; // ±àºÅ * ²»¿É¸ü¸Ä£¬Ö»ÄÜÓÉÏµÍ³Éú³É
-	private String name; // ĞÕÃû
-	private String name_pinyin; // ĞÕÃûÆ´Òô
-	private Date birthday; // ÉúÈÕ
-	private String phone_num1; // ÊÖ»úºÅ1
-	private String phone_num2; // ÊÖ»úºÅ2
-	private String phone_num3; // ÊÖ»úºÅ3
-	private String location; // ËùÔÚµØ
-	private int group; // Ëù´¦Èº×é
+	private int ID_number; 			// ID of the student
+	private String name; 			// name of the student
+	private String name_pinyin; 	// name's pinyin of the student
+	private Date birthday; 			// birthday of the student
+	private String phone_num1; 		// first phone number of the student
+	private String phone_num2; 		// second phone number of the student
+	private String phone_num3; 		// third phone number of the student 
+	private String location; 		// current location of the student 
+	private int group; 				// group of the student
 
-	// ²ÎÊıÍêÈ«µÄ¹¹Ôìº¯Êı
 	public People(String name, Date birthday, String phone_num1,
 			String phone_num2, String phone_num3, String location, int group) {
-		PEOPLE_NUMBER++; // ÈËÊı±àºÅ¼Ó1
+		PEOPLE_NUMBER++; // ID 
 
 		this.ID_number = PEOPLE_NUMBER;
 		this.name = name;
@@ -45,39 +44,37 @@ public class People {
 		calNamePinyin();
 	}
 
-	// Ö»º¬2¸öÊÖ»úºÅµÄ¹¹Ôìº¯Êı
 	public People(String name, Date birthday, String phone_num1,
 			String phone_num2, String location, int group) {
 		this(name, birthday, phone_num1, phone_num2, "NULL", location, group);
 	}
 
-	// Ö»º¬1¸öÊÖ»úºÅµÄ¹¹Ôìº¯Êı
 	public People(String name, Date birthday, String phone_num1,
 			String location, int group) {
 		this(name, birthday, phone_num1, "NULL", location, group);
 	}
 
-	// ¼ÆËã³öÓÃ»§µÄĞÕÃûÆ´Òô
+	// Cn to pinyin
 	private void calNamePinyin() {
 		this.name_pinyin = Tools.Cn2Spell.getFullSpell(this.name);
 	}
 
 	@Override
 	public String toString() {
-		return "±àºÅ£º" + this.ID_number+"\n" +
-				   "ĞÕÃû£º" + this.name + "\n" + 
-				   "Æ´Òô£º" + this.name_pinyin + "\n" + 
-				   "ÉúÈÕ£º" + this.birthday.toString() + "\n" + 
-				   "µç»°ºÅÂë1£º" + this.phone_num1 + "\n" + 
-				   "µç»°ºÅÂë2£º" + this.phone_num2 + "\n" + 
-				   "µç»°ºÅÂë3£º" + this.phone_num3 + "\n" + 
-				   "ËùÔÚµØ£º" + this.location + "\n" + 
-				   "·Ö×é£º" + this.group;
+		return "ï¿½ï¿½Å£ï¿½" + this.ID_number+"\n" +
+				   "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + this.name + "\n" + 
+				   "Æ´ï¿½ï¿½ï¿½ï¿½" + this.name_pinyin + "\n" + 
+				   "ï¿½ï¿½ï¿½Õ£ï¿½" + this.birthday.toString() + "\n" + 
+				   "ï¿½ç»°ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½" + this.phone_num1 + "\n" + 
+				   "ï¿½ç»°ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½" + this.phone_num2 + "\n" + 
+				   "ï¿½ç»°ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½" + this.phone_num3 + "\n" + 
+				   "ï¿½ï¿½ï¿½ÚµØ£ï¿½" + this.location + "\n" + 
+				   "ï¿½ï¿½ï¿½é£º" + this.group;
 	}
 
 	// //////////////////////////////////////////////////////////////////
 	//
-	// get && set ·½·¨
+	// get && set methods
 	public Date getBirthday() {
 		return birthday;
 	}

@@ -29,7 +29,7 @@ public class Date {
 
 	// //////////////////////////////////////////////////////////////////
 	//
-	// get && set ·½·¨
+	// get && set methods
 	public int getYear() {
 		return year;
 	}

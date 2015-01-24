@@ -7,7 +7,7 @@ import java.util.Set;
 public class Cn2Spell {
 
 	/**
-	 * ClassName:Cn2Spell ÖÐÎÄ×ªÆ´Òô
+	 * ClassName:Cn2Spell ä¸­æ–‡è½¬æ‹¼éŸ³
 	 */
 
 	private static LinkedHashMap<String, Integer> spellMap = null;
@@ -23,33 +23,31 @@ public class Cn2Spell {
 	}
 
 	/**
-	 * »ñµÃµ¥¸öºº×ÖµÄAscii.
-	 * 
-	 * @param cn ºº×Ö×Ö·û
-	 * @return int ´íÎó·µ»Ø 0,·ñÔò·µ»Øascii
+	 * åˆ°ä¸­æ–‡çš„ASCII
+	 * @param cn
+	 * @return
 	 */
 	private static int getCnAscii(char cn) {
 		byte[] bytes = (String.valueOf(cn)).getBytes();
-		if (bytes == null || bytes.length > 2 || bytes.length <= 0) { // ´íÎó
+		if (bytes == null || bytes.length > 2 || bytes.length <= 0) { // ï¿½ï¿½ï¿½ï¿½
 			return 0;
 		}
-		if (bytes.length == 1) { // Ó¢ÎÄ×Ö·û
+		if (bytes.length == 1) { // Ó¢ï¿½ï¿½ï¿½Ö·ï¿½
 			return bytes[0];
 		}
-		if (bytes.length == 2) { // ÖÐÎÄ×Ö·û
+		if (bytes.length == 2) { // ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½
 			int hightByte = 256 + bytes[0];
 			int lowByte = 256 + bytes[1];
 			int ascii = (256 * hightByte + lowByte) - 256 * 256;
 			return ascii;
 		}
-		return 0; // ´íÎó
+		return 0; // ï¿½ï¿½ï¿½ï¿½
 	}
 
 	/**
-	 * ·µ»Ø×Ö·û´®µÄÈ«Æ´,ÊÇºº×Ö×ª»¯ÎªÈ«Æ´,ÆäËü×Ö·û²»½øÐÐ×ª»»
-	 * 
-	 * @param cnStr ×Ö·û´®
-	 * @return String ×ª»»³ÉÈ«Æ´ºóµÄ×Ö·û´®
+	 * èŽ·å¾—åå­—çš„æ‹¼éŸ³
+	 * @param cnStr
+	 * @return
 	 */
 	public static String getFullSpell(String cnStr) {
 		if (null == cnStr || "".equals(cnStr.trim())) {
@@ -60,7 +58,7 @@ public class Cn2Spell {
 		StringBuffer retuBuf = new StringBuffer();
 		for (int i = 0, Len = chars.length; i < Len; i++) {
 			int ascii = getCnAscii(chars[i]);
-			if (ascii == 0) { // È¡asciiÊ±³ö´í
+			if (ascii == 0) { // È¡asciiÊ±ï¿½ï¿½ï¿½ï¿½
 				retuBuf.append(chars[i]);
 			} else {
 				String spell = getSpellByAscii(ascii);
@@ -76,19 +74,16 @@ public class Cn2Spell {
 	}
 
 	/**
-	 * ¸ù¾ÝASCIIÂëµ½SpellMapÖÐ²éÕÒ¶ÔÓ¦µÄÆ´Òô
-	 * 
+	 * é€šè¿‡ASCII å¾—åˆ°ä¸­æ–‡æ‹¼éŸ³
 	 * @param ascii
-	 *            int ×Ö·û¶ÔÓ¦µÄASCII
-	 * @return String Æ´Òô,Ê×ÏÈÅÐ¶ÏASCIIÊÇ·ñ>0&<160,Èç¹ûÊÇ·µ»Ø¶ÔÓ¦µÄ×Ö·û,
-	 *         ·ñÔòµ½SpellMapÖÐ²éÕÒ,Èç¹ûÃ»ÓÐÕÒµ½Æ´Òô,Ôò·µ»Ønull,Èç¹ûÕÒµ½Ôò·µ»ØÆ´Òô.
+	 * @return
 	 */
 	private static String getSpellByAscii(int ascii) {
-		if (ascii > 0 && ascii < 160) { // µ¥×Ö·û
+		if (ascii > 0 && ascii < 160) { // ï¿½ï¿½ï¿½Ö·ï¿½
 			return String.valueOf((char) ascii);
 		}
 
-		if (ascii < -20319 || ascii > -10247) { // ²»ÖªµÀµÄ×Ö·û
+		if (ascii < -20319 || ascii > -10247) { // ï¿½ï¿½Öªï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½
 			return null;
 		}
 
@@ -107,7 +102,7 @@ public class Cn2Spell {
 			if (valObj instanceof Integer) {
 				asciiRang = ((Integer) valObj).intValue();
 
-				if (ascii >= asciiRang0 && ascii < asciiRang) { // Çø¼äÕÒµ½
+				if (ascii >= asciiRang0 && ascii < asciiRang) { // ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½
 					return (spell0 == null) ? spell : spell0;
 				} else {
 					spell0 = spell;
@@ -124,6 +119,9 @@ public class Cn2Spell {
 		spellMap.put(spell, new Integer(ascii));
 	}
 
+	/**
+	 * åˆå§‹åŒ–æ‹¼éŸ³åº“
+	 */
 	private static void initialize() {
 		spellPut("a", -20319);
 		spellPut("ai", -20317);

@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 public class Client {
 
 	// 用来存放分组信息的hashmap
@@ -25,7 +23,9 @@ public class Client {
 	public static String userPhoneNum2;
 	public static String userQQNum;
 	public static String userLocation;
-	
+
+	public String searchSecondContent = null;
+
 	public Client() {
 
 	}
@@ -56,6 +56,7 @@ public class Client {
 		}// end of finally
 
 	}
+
 	// /////////////////////////////////////////////////////////////////////////////
 
 	private void initClient(Scanner scan) throws InterruptedException {
@@ -93,12 +94,15 @@ public class Client {
 				if (contacts == null) {
 					contacts = new HashMap<Integer, People>();
 				}
-				Tools.ReadFromFile.readFileByLines("Group.txt", Tools.ReadFromFile.KIND_GROUP);
-				Tools.ReadFromFile.readFileByLines("Contacts.txt", Tools.ReadFromFile.KIND_CONTACTS);
-				
+				Tools.ReadFromFile.readFileByLines("Group.txt",
+						Tools.ReadFromFile.KIND_GROUP);
+				Tools.ReadFromFile.readFileByLines("Contacts.txt",
+						Tools.ReadFromFile.KIND_CONTACTS);
+
 				refresh();
-				System.out.print("正在从默认文件(Group.txt, Contacts.txt)中导入数据，请稍等...");
-				Thread.sleep(600);
+				System.out
+						.print("正在从默认文件(Group.txt, Contacts.txt)中导入数据，请稍等...");
+				Thread.sleep(500);
 				refresh();
 				System.out.print("导入成功");
 				Thread.sleep(300);
@@ -116,9 +120,9 @@ public class Client {
 		userBirth = scan.nextLine();
 		System.out.print("手机号码 1> ");
 		userPhoneNum = scan.nextLine();
-		System.out.print("手机号码 2(没有填“无”)> ");
+		System.out.print("手机号码 2(没有填“/”)> ");
 		userPhoneNum2 = scan.nextLine();
-		System.out.print("QQ号码(没有填“无”)> ");
+		System.out.print("QQ号码(没有填“/”)> ");
 		userQQNum = scan.nextLine();
 		System.out.print("所在地> ");
 		userLocation = scan.nextLine();
@@ -126,6 +130,39 @@ public class Client {
 		System.out.println("数据添加成功!");
 	}
 
+	private void initConInfo(Scanner scan, int key) {
+		System.out.print("姓名> ");
+		contacts.get(key).setName(scan.nextLine());
+		System.out.print("性别> ");
+		contacts.get(key).setGender(scan.nextLine());
+		System.out.print("生日[xxxx-xx-xx]> ");
+		contacts.get(key).setBirthday(scan.nextLine());
+		System.out.print("手机号码 1> ");
+		contacts.get(key).setPhoneNum1(scan.nextLine());
+		System.out.print("手机号码 2(没有填“/”)> ");
+		contacts.get(key).setPhoneNum2(scan.nextLine());
+		System.out.print("QQ号码(没有填“/”)> ");
+		contacts.get(key).setQQNum(scan.nextLine());
+		System.out.print("所在地> ");
+		contacts.get(key).setLocation(scan.nextLine());
+
+		System.out.println("请选择分组");
+
+		Iterator<Entry<Integer, String>> iter2 = group.entrySet().iterator();
+		while (iter2.hasNext()) {
+			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
+					.next();
+			System.out
+					.println("   " + entry.getKey() + ": " + entry.getValue());
+		}
+
+		System.out.print("分组> ");
+		contacts.get(key).setGroup(Integer.parseInt(scan.nextLine()));
+		System.out.println();
+		System.out.println("数据添加成功!");
+	}
+
+	// 显示用户信息
 	private void showUserInfo() {
 		System.out.println("-------------- 个人信息 --------------\n");
 		System.out.println("- 姓名：" + userName + " -");
@@ -180,9 +217,9 @@ public class Client {
 
 		}
 	}
+
 	// /////////////////////////////////////////////////////////////////////////////
 
-	@SuppressWarnings("unchecked")
 	private void optSearchCon(Scanner scan) {
 		refresh();
 
@@ -201,102 +238,247 @@ public class Client {
 
 		System.out.print(userName + "@主菜单\\查找联系人> ");
 		String key = scan.nextLine();
-		
+
+		// 查找联系人
+		searchCont(scan, key, 1);
+	}
+
+	private void searchCont(Scanner scan, String key, int times) {
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		
-		String content;
-		boolean result = false;
-		switch(key) {
+
+		int[] IDary = new int[contacts.size()];
+		int resultNumber = 0;
+		switch (key) {
 		case "1":
-			result = searchConByID(scan, result);
+			resultNumber = searchConByID(scan, IDary, times);
 			break;
 		case "2":
-			refresh();
-			
-			System.out.println("请选择分组\n");
-			
-			Iterator<Entry<Integer, String>> iter2 = group.entrySet().iterator();
-			while (iter2.hasNext()) {
-				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
-						.next();
-				System.out.println(entry.getKey() + ": " + entry.getValue());
-			}
-			
-			
-			System.out.print(userName + "@主菜单\\查找联系人\\分组查找> ");
-			content = scan.nextLine();
-			
-			Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
-
-			while (iter.hasNext()) {
-				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
-						.next();
-				if (String.valueOf(entry.getKey()).equals(content)) {
-					System.out.println("            " + entry.getValue());
-					System.out.println("------------------------------");
-	
-					Iterator<Entry<Integer, People>> tempIter = contacts.entrySet()
-							.iterator();
-					while (tempIter.hasNext()) {
-						Map.Entry<Integer, People> tempEntry = (Map.Entry<Integer, People>) tempIter
-								.next();
-						if (tempEntry.getValue().getGroup() == entry.getKey()) {
-							System.out.println(((People)tempEntry.getValue()).toString());
-							result = true;
-						}
-					}
-				}
-			}
-			
+			resultNumber = searchConByGroup(scan, IDary, times);
+			break;
+		case "3":
+			resultNumber = searchConByName(scan, IDary, times);
 			break;
 		default:
-			break;
+			return;
 		}
-		
-		if (!result) {
+
+		if (resultNumber == 0) {
 			refresh();
 			System.out.println("      查找联系人");
 			System.out.println("--------------------\n");
 			System.out.println("   未能找到相关联系人");
 		}
-		
+
+		System.out.println("\n共 " + resultNumber + " 个结果");
 		System.out.println("\n选项：");
-		System.out.println("   1.继续查找");
+		System.out.println("   1.查看详细信息");
+		System.out.println("   2.修改查询结果信息");
+		System.out.println("   9.继续查找");
 		System.out.println("   0.返回主菜单\n");
 		System.out.print(userName + "@主菜单\\查找联系人\\查找结果> ");
-		key = scan.nextLine();
-		if (key.equals("1")) {
+		String optkey = scan.nextLine();
+		if (optkey.equals("9")) {
 			optSearchCon(scan);
+		} else if (optkey.equals("2")) {
+			// 修改查询结果信息
+			changeResultInfo(scan, key, times, IDary, resultNumber);
+		} else if (optkey.equals("1")) {
+			refresh();
+			for (int i = 0; i < resultNumber; i++) {
+				System.out.println("         第 " + (i + 1) + " 个结果");
+				System.out
+						.println(((People) contacts.get(IDary[i])).toString());
+			}
+			System.out.println("\n共 " + resultNumber + " 个结果");
+			System.out.println("\n选项：");
+			System.out.println("   1.修改查询结果信息");
+			System.out.println("   2.继续查找");
+			System.out.println("   0.返回主菜单\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\查找结果\\详细信息> ");
+			String dShowUserInfo = scan.nextLine();
+			if (dShowUserInfo.equals("2")) {
+				optSearchCon(scan);
+			} else if (dShowUserInfo.equals("1")) {
+				// 修改查询结果信息
+				changeResultInfo(scan, key, times, IDary, resultNumber);
+			} else {
+
+			} // end of 1 2 0
+
 		} else {
-			
-		}
-		
-		
+
+		}// key 1 2 9
 	}
 
-	private boolean searchConByID(Scanner scan, boolean result) {
-		String content;
+	// 修改查询结果信息
+	private void changeResultInfo(Scanner scan, String key, int times,
+			int[] IDary, int resultNumber) {
+		if (resultNumber > 1) {
+			refresh();
+			System.out.println("    修改联系人信息");
+			System.out.println("--------------------\n");
+			System.out.println("查询结果：");
+			for (int i = 0; i < resultNumber; i++) {
+				System.out.println("   " + (i + 1) + "."
+						+ ((People) contacts.get(IDary[i])).getName() + " "
+						+ ((People) contacts.get(IDary[i])).getGender() + " "
+						+ ((People) contacts.get(IDary[i])).getPhoneNum1()
+						+ " "
+						+ ((People) contacts.get(IDary[i])).getGroupName());
+			}
+			System.out.println("\n请选择需要修改的联系人编号[1,2...]\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\查找结果\\修改联系人信息> ");
+			String changeContactNumber = scan.nextLine();
+			int changeNumber = IDary[Integer.parseInt(changeContactNumber) - 1];
+
+			changeContactInfo(scan, changeNumber, "@主菜单\\查找联系人\\查找结果\\修改联系人信息");
+			changeContactNumber = scan.nextLine();
+			while (changeContactNumber.equals("1")) {
+				changeContactInfo(scan, changeNumber,
+						"@主菜单\\查找联系人\\查找结果\\修改联系人信息");
+				changeContactNumber = scan.nextLine();
+			}
+			if (changeContactNumber.equals("0")) {
+				searchCont(scan, key, (times + 1));
+			}
+		} else {
+			// 只有一个查询结果
+			refresh();
+			changeContactInfo(scan, IDary[0], "@主菜单\\查找联系人\\查找结果\\修改联系人信息");
+			String changeContactNumber = scan.nextLine();
+			while (changeContactNumber.equals("1")) {
+				changeContactInfo(scan, IDary[0], "@主菜单\\查找联系人\\查找结果\\修改联系人信息");
+				changeContactNumber = scan.nextLine();
+			}
+			if (changeContactNumber.equals("0")) {
+				searchCont(scan, key, (times + 1));
+			}
+		}
+	}
+
+	// 通过姓名查找
+	private int searchConByName(Scanner scan, int[] IDary, int times) {
+		if (times == 1) {
+			refresh();
+			System.out.println("      查找联系人");
+			System.out.println("--------------------\n");
+			System.out.println("请输入联系人姓名\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\姓名查找> ");
+			searchSecondContent = scan.nextLine();
+		}
+		int i = 0;
 		refresh();
-		
-		System.out.println("请输入联系人编号\n");
-		System.out.print(userName + "@主菜单\\查找联系人\\编号查找> ");
-		content = scan.nextLine();
-		
+
+		System.out.println("      查找联系人");
+		System.out.println("--------------------\n");
+		System.out.println("查找结果：");
+
 		Iterator<Entry<Integer, People>> iter = contacts.entrySet().iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			Entry<Integer, People> entry = iter.next();
-			if (String.valueOf(entry.getKey()).equals(content)) {
-				refresh();
-				System.out.println("          查找结果");
-				System.out.println(((People)entry.getValue()).toString());
-				result = true;
+			if (((People) entry.getValue()).getName().equals(
+					searchSecondContent)) {
+				System.out.println("   " + (i + 1) + "."
+						+ ((People) entry.getValue()).getName() + " "
+						+ ((People) entry.getValue()).getGender() + " "
+						+ ((People) entry.getValue()).getPhoneNum1() + " "
+						+ ((People) entry.getValue()).getGroupName());
+				IDary[i++] = entry.getKey();
+			}
+		}
+		return i;
+	}
+
+	// 依据群组查找
+	private int searchConByGroup(Scanner scan, int[] IDary, int times) {
+		if (times == 1) {
+			refresh();
+			System.out.println("      查找联系人");
+			System.out.println("--------------------\n");
+			System.out.println("请选择分组");
+
+			Iterator<Entry<Integer, String>> iter2 = group.entrySet()
+					.iterator();
+			while (iter2.hasNext()) {
+				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
+						.next();
+				System.out.println("   " + entry.getKey() + ": "
+						+ entry.getValue());
+			}
+
+			System.out.println();
+			System.out.print(userName + "@主菜单\\查找联系人\\分组查找> ");
+			searchSecondContent = scan.nextLine();
+		}
+
+		int i = 0;
+
+		refresh();
+
+		Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
+
+		while (iter.hasNext()) {
+			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
+					.next();
+			if (String.valueOf(entry.getKey()).equals(searchSecondContent)) {
+				System.out.println("         " + entry.getValue());
+				System.out.println("------------------------");
+
+				Iterator<Entry<Integer, People>> tempIter = contacts.entrySet()
+						.iterator();
+				while (tempIter.hasNext()) {
+					Map.Entry<Integer, People> tempEntry = (Map.Entry<Integer, People>) tempIter
+							.next();
+					if (tempEntry.getValue().getGroup() == entry.getKey()) {
+						System.out.println("   "
+								+ ((People) tempEntry.getValue()).getName()
+								+ " "
+								+ ((People) tempEntry.getValue()).getGender()
+								+ " "
+								+ ((People) tempEntry.getValue())
+										.getPhoneNum1());
+						IDary[i++] = tempEntry.getKey();
+					}
+				}
+			}
+		}
+		return i;
+	}
+
+	// 依据ID查找
+	private int searchConByID(Scanner scan, int[] IDary, int times) {
+		if (times == 1) {
+			refresh();
+			System.out.println("      查找联系人");
+			System.out.println("--------------------\n");
+			System.out.println("请输入联系人编号\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\编号查找> ");
+			searchSecondContent = scan.nextLine();
+		}
+		int i = 0;
+		refresh();
+
+		Iterator<Entry<Integer, People>> iter = contacts.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<Integer, People> entry = iter.next();
+			if (String.valueOf(entry.getKey()).equals(searchSecondContent)) {
+				System.out.println("      查找联系人");
+				System.out.println("--------------------\n");
+				System.out.println("查找结果：");
+				System.out.println("   " + (i + 1) + "."
+						+ ((People) entry.getValue()).getName() + " "
+						+ ((People) entry.getValue()).getGender() + " "
+						+ ((People) entry.getValue()).getPhoneNum1() + " "
+						+ ((People) entry.getValue()).getGroupName());
+				IDary[i++] = entry.getKey();
 				break;
 			}
 		}
-		return result;
+		return i;
 	}
-	
+
+	// 显示联系人选项
 	private void optShowCon(Scanner scan) {
 		refresh();
 
@@ -326,9 +508,11 @@ public class Client {
 
 		System.out.println("选项：");
 		System.out.println("   1.显示详细信息");
+		System.out.println("   2.添加联系人");
 		System.out.println("   0.返回主菜单\n");
 		System.out.print(userName + "@主菜单\\显示通讯录> ");
 		String key = scan.nextLine();
+		// 显示详细列表
 		if (key.equals("1")) {
 			refresh();
 			showConByGroupD();
@@ -336,8 +520,92 @@ public class Client {
 			System.out.println("   0.返回主菜单\n");
 			System.out.print(userName + "@主菜单\\显示通讯录\\显示详细信息> ");
 			scan.nextLine();
+		} else if (key.equals("2")) {
+			// 添加联系人
+			addContact(scan);
 		} else {
-			
+
+		}
+	}
+
+	// 添加联系人
+	private void addContact(Scanner scan) {
+		refresh();
+		System.out.println("      添加联系人");
+		System.out.println("--------------------\n");
+		System.out.println("1.分组(从下列中选取一项，填序号)\n");
+		Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
+					.next();
+			System.out.println("  " + entry.getKey() + ") " + entry.getValue());
+		}
+		System.out.println("\n2.姓名");
+		System.out.println("3.性别");
+		System.out.println("4.生日[xxxx-xx-xx]");
+		System.out.println("5.手机号码 1");
+		System.out.println("6.手机号码 2(没有填“/”)");
+		System.out.println("7.QQ号码(没有填“/”)");
+		System.out.println("8.所在地\n");
+		System.out.println("\n请键入上述内容，每项用空格分开\n");
+		System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+		String str = scan.nextLine();
+		String arg[] = str.split(" ");
+
+		refresh();
+		System.out.println("      添加联系人");
+		System.out.println("--------------------\n");
+		System.out.println("确定要添加吗？\n");
+		System.out.println("选项：");
+		System.out.println("   1.确定添加");
+		System.out.println("   0.取消添加\n");
+		System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+
+		str = scan.nextLine();
+		if (str.equals("0")) {
+
+		} else if (str.equals("1")) {
+			while (arg.length != 8) {
+				refresh();
+				System.out.println("输入错误\n");
+				System.out.println("      添加联系人");
+				System.out.println("--------------------\n");
+				System.out.println("1.分组(从下列中选取一项，填序号)\n");
+				Iterator<Entry<Integer, String>> iter3 = group.entrySet().iterator();
+				while (iter3.hasNext()) {
+					Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter3
+							.next();
+					System.out.println("  " + entry.getKey() + ") " + entry.getValue());
+				}
+				System.out.println("\n2.姓名");
+				System.out.println("3.性别");
+				System.out.println("4.生日[xxxx-xx-xx]");
+				System.out.println("5.手机号码 1");
+				System.out.println("6.手机号码 2(没有填“/”)");
+				System.out.println("7.QQ号码(没有填“/”)");
+				System.out.println("8.所在地\n");
+				System.out.println("\n请键入上述内容，每项用空格分开\n");
+				System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+				str = scan.nextLine();
+			}
+			if (arg.length == 8) {
+				String date[] = arg[3].split("-");
+				People newPeople = new People(Integer.parseInt(arg[0]), arg[1],
+						arg[2], new Date(Integer.parseInt(date[0]),
+								Integer.parseInt(date[1]),
+								Integer.parseInt(date[2])), arg[4], arg[5],
+						arg[6], arg[7]);
+				contacts.put(newPeople.getIDNumber(), newPeople);
+				refresh();
+				
+				System.out.println("添加成功\n");
+				System.out.println("      新联系人");
+				System.out.println(contacts.get(newPeople.getIDNumber()).toString());
+				System.out.println("选项：");
+				System.out.println("   0.返回主菜单\n");
+				System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+				scan.nextLine();
+			} 
 		}
 	}
 
@@ -347,7 +615,8 @@ public class Client {
 		System.out.println("             通讯录");
 		System.out.println("------------------------------\n\n");
 
-		HashMap<Integer, People> temp = (HashMap<Integer, People>) contacts.clone();
+		HashMap<Integer, People> temp = (HashMap<Integer, People>) contacts
+				.clone();
 
 		Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
 		int[] record = new int[contacts.size()];
@@ -367,10 +636,8 @@ public class Client {
 				Map.Entry<Integer, People> tempEntry = (Map.Entry<Integer, People>) tempIter
 						.next();
 				if (tempEntry.getValue().getGroup() == entry.getKey()) {
-					System.out.println(
-							"    "+
-							((People) tempEntry.getValue()).getName()
-							+ "   "
+					System.out.println("    "
+							+ ((People) tempEntry.getValue()).getName() + "   "
 							+ ((People) tempEntry.getValue()).getGender()
 							+ "   "
 							+ ((People) tempEntry.getValue()).getPhoneNum1());
@@ -393,7 +660,8 @@ public class Client {
 		System.out.println("             通讯录");
 		System.out.println("------------------------------\n\n");
 
-		HashMap<Integer, People> temp1 = (HashMap<Integer, People>) contacts.clone();
+		HashMap<Integer, People> temp1 = (HashMap<Integer, People>) contacts
+				.clone();
 
 		Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
 		int[] record = new int[contacts.size()];
@@ -432,6 +700,8 @@ public class Client {
 	private void optExitSys() {
 		refresh();
 		System.out.println("系统正在退出中，请稍等...");
+		Tools.WriteToFile.writeFileByName("Contacts.txt",
+				Tools.WriteToFile.KIND_CON_INFO);
 		System.out.print("谢谢使用～");
 		System.exit(0);
 	}
@@ -468,6 +738,7 @@ public class Client {
 		}
 	}
 
+	// 更改用户信息
 	private void changeUserInfo(Scanner scan) {
 		String pressKey;
 		refresh();
@@ -481,7 +752,8 @@ public class Client {
 		System.out.println("   5.电话号码 2");
 		System.out.println("   6.QQ号码");
 		System.out.println("   7.所在地");
-		System.out.println("   0.全部重置\n");
+		System.out.println("   9.全部重置\n");
+		System.out.println("   0.取消修改\n");
 		System.out.print(userName + "@主菜单\\个人信息\\修改个人信息> ");
 		pressKey = scan.nextLine();
 		switch (pressKey) {
@@ -541,9 +813,18 @@ public class Client {
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改所在地> ");
 			userLocation = scan.nextLine();
 			break;
-		case "0":
+		case "9":
 			initUserInfo(scan);
 			break;
+		case "0":
+			refresh();
+			System.out.println("修改取消\n");
+			showUserInfo();
+			System.out.println("选项：");
+			System.out.println("   1.继续修改");
+			System.out.println("   0.返回主菜单\n");
+			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息> ");
+			return;
 		}
 
 		// 将用户信息写入文件
@@ -556,6 +837,100 @@ public class Client {
 		System.out.println("   1.继续修改");
 		System.out.println("   0.返回主菜单\n");
 		System.out.print(userName + "@主菜单\\个人信息\\修改个人信息> ");
+	}
+
+	private void changeContactInfo(Scanner scan, int key, String path) {
+		String pressKey;
+		refresh();
+		System.out.println("    修改联系人信息");
+		System.out.println("--------------------\n");
+		System.out.println("修改选项：");
+		System.out.println("   1.姓名");
+		System.out.println("   2.性别");
+		System.out.println("   3.生日");
+		System.out.println("   4.电话号码 1");
+		System.out.println("   5.电话号码 2");
+		System.out.println("   6.QQ号码");
+		System.out.println("   7.所在地");
+		System.out.println("   8.关系");
+		System.out.println("   9.全部重置\n");
+		System.out.println("   0.取消修改\n");
+		System.out.print(userName + path + "> ");
+		pressKey = scan.nextLine();
+		refresh();
+		System.out.println("    修改联系人信息");
+		System.out.println("--------------------\n");
+		switch (pressKey) {
+		case "1":
+			System.out.println("请输入姓名：\n");
+			System.out.print(userName + path + "\\修改姓名> ");
+			contacts.get(key).setName(scan.nextLine());
+			break;
+		case "2":
+			System.out.println("请输入性别：\n");
+			System.out.print(userName + path + "\\修改性别> ");
+			contacts.get(key).setGender(scan.nextLine());
+			break;
+		case "3":
+			System.out.println("请输入生日[xxxx-xx-xx]：\n");
+			System.out.print(userName + path + "\\修改生日> ");
+			contacts.get(key).setBirthday(scan.nextLine());
+			break;
+		case "4":
+			System.out.println("请输入手机号码：\n");
+			System.out.print(userName + path + "\\修改手机号码 1> ");
+			contacts.get(key).setPhoneNum1(scan.nextLine());
+			break;
+		case "5":
+			System.out.println("请输入手机号码：\n");
+			System.out.print(userName + path + "\\修改手机号码 2> ");
+			contacts.get(key).setPhoneNum2(scan.nextLine());
+			break;
+		case "6":
+			System.out.println("请输入QQ号码：\n");
+			System.out.print(userName + path + "\\修改QQ号码> ");
+			contacts.get(key).setQQNum(scan.nextLine());
+			break;
+		case "7":
+			System.out.println("请输入所在地：\n");
+			System.out.print(userName + path + "\\修改所在地> ");
+			contacts.get(key).setLocation(scan.nextLine());
+			break;
+		case "8":
+			System.out.println("请输入群组：\n");
+
+			Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
+						.next();
+				System.out.println("   " + entry.getKey() + ": "
+						+ entry.getValue());
+			}
+			System.out.println();
+			System.out.print(userName + path + "\\修改群组> ");
+			contacts.get(key).setGroup(Integer.parseInt(scan.nextLine()));
+			break;
+		case "9":
+			initConInfo(scan, key);
+			break;
+		default:
+			refresh();
+			System.out.println("修改取消\n");
+			System.out.println(contacts.get(key).toString());
+			System.out.println("选项：");
+			System.out.println("   1.继续修改");
+			System.out.println("   0.返回查询结果\n");
+			System.out.print(userName + "@主菜单\\修改联系人信息> ");
+			return;
+		}
+
+		refresh();
+		System.out.println("修改成功\n");
+		System.out.println(contacts.get(key).toString());
+		System.out.println("选项：");
+		System.out.println("   1.继续修改");
+		System.out.println("   0.返回查询结果\n");
+		System.out.print(userName + "@主菜单\\修改联系人信息> ");
 	}
 
 	// 导入通讯录
@@ -658,11 +1033,11 @@ public class Client {
 
 	// 刷新控制台
 	private void refresh() {
-		refresh(20);
+		refresh(30);
 	}
 
-	private void refresh(int time) {
-		for (int i = 0; i < time; i++) {
+	private void refresh(int times) {
+		for (int i = 0; i < times; i++) {
 			System.out.println("\n");
 		}
 	}

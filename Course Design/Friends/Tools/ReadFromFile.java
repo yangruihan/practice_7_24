@@ -107,23 +107,28 @@ public class ReadFromFile {
 	private static void putPeople(String[] ary) {
 		// 如果分组是订餐
 		if (ary[0].equals("6")) {
+			People res = null;
 			// 至少有3个参数
 			if (ary.length == 4) {
-				People res = new People(Integer.parseInt(ary[0]), ary[1],
-						"/", new Date(0, 0, 0), ary[2], ary[3]);
-				Client.contacts.put(res.getIDNumber(), res);
+				res = new People(Integer.parseInt(ary[0]), ary[1], "/",
+						new Date(0, 0, 0), ary[2], ary[3]);
 			}
 			if (ary.length == 5) {
-				People res = new People(Integer.parseInt(ary[0]), ary[1],
-						"/", new Date(0, 0, 0), ary[2], ary[3], ary[4]);
-				Client.contacts.put(res.getIDNumber(), res);
+				res = new People(Integer.parseInt(ary[0]), ary[1], "/",
+						new Date(0, 0, 0), ary[2], ary[3], ary[4]);
 			}
 			if (ary.length == 6) {
-				People res = new People(Integer.parseInt(ary[0]), ary[1],
-						"/", new Date(0, 0, 0), ary[2], ary[3], ary[4],
-						ary[5]);
-				Client.contacts.put(res.getIDNumber(), res);
+				res = new People(Integer.parseInt(ary[0]), ary[1], "/",
+						new Date(0, 0, 0), ary[2], ary[3], ary[4], ary[5]);
 			}
+			if (ary.length == 8) {
+				res = new People(Integer.parseInt(ary[0]), ary[1], ary[2],
+						new Date(0, 0, 0), ary[4], ary[5], ary[6], ary[7]);
+			}
+			if (res != null) {
+				res.setGroupName("订餐");
+			}
+			Client.contacts.put(res.getIDNumber(), res);
 		} // 如果分组不是订餐
 		else {
 			String[] date = ary[3].split("-");
@@ -131,22 +136,28 @@ public class ReadFromFile {
 			int month = Integer.parseInt(date[1]);
 			int day = Integer.parseInt(date[2]);
 			Date birth = new Date(year, month, day);
+			People peo = null;
 
 			if (ary.length == 8) {
-				People peo = new People(Integer.parseInt(ary[0]), ary[1],
-						ary[2], birth, ary[4], ary[5], ary[6], ary[7]);
-				Client.contacts.put(peo.getIDNumber(), peo);
+				peo = new People(Integer.parseInt(ary[0]), ary[1], ary[2],
+						birth, ary[4], ary[5], ary[6], ary[7]);
 			}
 			if (ary.length == 7) {
-				People peo = new People(Integer.parseInt(ary[0]), ary[1],
-						ary[2], birth, ary[4], ary[5], ary[6]);
-				Client.contacts.put(peo.getIDNumber(), peo);
+				peo = new People(Integer.parseInt(ary[0]), ary[1], ary[2],
+						birth, ary[4], ary[5], ary[6]);
 			}
 			if (ary.length == 6) {
-				People peo = new People(Integer.parseInt(ary[0]), ary[1],
-						ary[2], birth, ary[4], ary[5]);
-				Client.contacts.put(peo.getIDNumber(), peo);
+				peo = new People(Integer.parseInt(ary[0]), ary[1], ary[2],
+						birth, ary[4], ary[5]);
 			}
+			if (peo != null) {
+				peo.setGroupName(getGroupName(ary[0]));
+			}
+			Client.contacts.put(peo.getIDNumber(), peo);
 		}
+	}
+
+	private static String getGroupName(String group) {
+		return Client.group.get(Integer.parseInt(group));
 	}
 }

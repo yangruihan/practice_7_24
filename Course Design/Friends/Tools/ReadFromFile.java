@@ -110,17 +110,17 @@ public class ReadFromFile {
 			// 至少有3个参数
 			if (ary.length == 4) {
 				People res = new People(Integer.parseInt(ary[0]), ary[1],
-						"NULL", new Date(0, 0, 0), ary[2], ary[3]);
+						"/", new Date(0, 0, 0), ary[2], ary[3]);
 				Client.contacts.put(res.getIDNumber(), res);
 			}
 			if (ary.length == 5) {
 				People res = new People(Integer.parseInt(ary[0]), ary[1],
-						"NULL", new Date(0, 0, 0), ary[2], ary[3], ary[4]);
+						"/", new Date(0, 0, 0), ary[2], ary[3], ary[4]);
 				Client.contacts.put(res.getIDNumber(), res);
 			}
 			if (ary.length == 6) {
 				People res = new People(Integer.parseInt(ary[0]), ary[1],
-						"NULL", new Date(0, 0, 0), ary[2], ary[3], ary[4],
+						"/", new Date(0, 0, 0), ary[2], ary[3], ary[4],
 						ary[5]);
 				Client.contacts.put(res.getIDNumber(), res);
 			}

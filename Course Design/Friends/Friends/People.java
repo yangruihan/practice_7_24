@@ -43,12 +43,12 @@ public class People {
 
 	public People(int group, String name, String gender, Date birthday, String phone_num1,
 			String qq_num, String location) {
-		this(group, name, gender, birthday, phone_num1, "无", qq_num, location);
+		this(group, name, gender, birthday, phone_num1, "/", qq_num, location);
 	}
 
 	public People(int group, String name, String gender, Date birthday, String phone_num1,
 			String location) {
-		this(group, name, gender, birthday, phone_num1, "无", location);
+		this(group, name, gender, birthday, phone_num1, "/", location);
 	}
 
 	// 中文转化成拼音

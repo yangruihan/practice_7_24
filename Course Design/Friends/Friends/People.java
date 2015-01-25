@@ -11,22 +11,22 @@ public class People {
 	 * ClassName:People
 	 **/
 
-	public static int PEOPLE_NUMBER = 0; 		// the number of people in address list
+	public static int PEOPLE_NUMBER = 0; 		// 当前人数
 
-	private int IDNumber; 			// ID of the student
-	private String name; 			// name of the student
-	private String namePinyin; 	// name's pinyin of the student
-	private String nameHeadChar;	// name's head char
-	private Date birthday; 			// birthday of the student
-	private String phoneNum1; 		// first phone number of the student
-	private String phoneNum2; 		// second phone number of the student
-	private String phoneNum3; 		// third phone number of the student 
-	private String location; 		// current location of the student 
-	private String gender;
-	private int group; 				// group of the student
+	private int IDNumber; 			// ID
+	private String name; 			// 姓名
+	private String namePinyin; 		// 姓名拼音
+	private String nameHeadChar;	// 姓名拼音大写头字母
+	private Date birthday; 			// 生日
+	private String phoneNum1; 		// 电话号码 1
+	private String phoneNum2; 		// 电话号码 2
+	private String QQNum; 			// QQ号 
+	private String location; 		// 所在地
+	private String gender;			// 性别
+	private int group; 				// 群组
 
 	public People(int group, String name, String gender, Date birthday, String phone_num1,
-			String phone_num2, String phone_num3, String location) {
+			String phone_num2, String QQNum, String location) {
 		PEOPLE_NUMBER++; // ID 
 		this.group = group;
 		this.IDNumber = PEOPLE_NUMBER;
@@ -35,28 +35,28 @@ public class People {
 		this.birthday = birthday;
 		this.phoneNum1 = phone_num1;
 		this.phoneNum2 = phone_num2;
-		this.phoneNum3 = phone_num3;
+		this.QQNum = QQNum;
 		this.location = location;
 		this.namePinyin = calNamePinyin();
 		this.nameHeadChar = getNameHeadChar();
 	}
 
 	public People(int group, String name, String gender, Date birthday, String phone_num1,
-			String phone_num2, String location) {
-		this(group, name, gender, birthday, phone_num1, phone_num2, "NULL", location);
+			String qq_num, String location) {
+		this(group, name, gender, birthday, phone_num1, "无", qq_num, location);
 	}
 
 	public People(int group, String name, String gender, Date birthday, String phone_num1,
 			String location) {
-		this(group, name, gender, birthday, phone_num1, "NULL", location);
+		this(group, name, gender, birthday, phone_num1, "无", location);
 	}
 
-	// Cn to pinyin
+	// 中文转化成拼音
 	private String calNamePinyin() {
 		return Tools.CnToSpell.getPinYin(this.name);
 	}
 	
-	// get name pinyin head char
+	// 获得姓名大写字母
 	private String getNameHeadChar() {
 		return Tools.CnToSpell.getPinYinHeadChar(this.name);
 	}
@@ -70,7 +70,7 @@ public class People {
 				   "\t生日：" + this.birthday.toString() + "\n" + 
 				   "\t电话号码 1：" + this.phoneNum1 + "\n" + 
 				   "\t电话号码 2：" + this.phoneNum2 + "\n" + 
-				   "\t电话号码 3：" + this.phoneNum3 + "\n" + 
+				   "\tQQ号码：" + this.QQNum + "\n" + 
 				   "\t所在地：" + this.location +
 				   "\n------------------------------\n";
 	}
@@ -138,12 +138,12 @@ public class People {
 		this.phoneNum2 = phoneNum2;
 	}
 
-	public String getPhoneNum3() {
-		return phoneNum3;
+	public String getQQNum() {
+		return QQNum;
 	}
 
-	public void setPhoneNum3(String phoneNum3) {
-		this.phoneNum3 = phoneNum3;
+	public void setQQNum(String QQNum) {
+		this.QQNum = QQNum;
 	}
 
 	public String getLocation() {

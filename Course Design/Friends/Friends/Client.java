@@ -1,28 +1,30 @@
 package Friends;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 public class Client {
 
 	// 用来存放分组信息的hashmap
-	public static HashMap<Integer, String> group = new HashMap<Integer, String>();
+	public static HashMap<Integer, String> group = null;
 
 	// 用来存放联系人的hashmap
-	public static HashMap<Integer, People> contacts = new HashMap<Integer, People>();
+	public static HashMap<Integer, People> contacts = null;
 
-	// the file kind
-	public static int KIND_GROUP = -99; // 分组信息
-	public static int KIND_CONTACTS = -90; // 通讯录内容
-
-	// the number of tasks
-	public static int MAIN_MENU = 1001; // the main menu
-	public static int IMPORT = 1002; // import into address list
-	public static int SHOW = 1003; // show the address list
-	public static int SEARCH = 1004; // search someone
+	// 用户信息
+	public static String userName;
+	public static String userGender;
+	public static String userBirth;
+	public static String userPhoneNum;
+	public static String userPhoneNum2;
+	public static String userQQNum;
+	public static String userLocation;
 
 	public Client() {
 
@@ -32,40 +34,16 @@ public class Client {
 		Scanner scan = new Scanner(System.in);
 
 		try {
-			String userKey;
-			
 			refresh();
 
-			System.out.println("------------- 个人通讯录 -------------");
-			System.out.println("                            By Y.R.H\n");
+			System.out.println("           欢迎使用个人通讯录\n");
 
-			while (true) {
+			// 初始化客户端
+			initClient(scan);
 
-				System.out.println("选项：");
-				System.out.println("   1.导入通讯录");
-				System.out.println("   0.退出\n");
-				System.out.println("请用户选择[1, 0]");
-				System.out.print("root@主界面> ");
+			// 程序主循环
+			mainLoop(scan);
 
-				userKey = scan.nextLine();
-
-				switch (userKey) {
-				case "1":
-					refresh();
-					importAdd(scan);
-					break;
-				case "0":
-					refresh();
-					System.out.println("系统正在退出中，请稍等...");
-					System.out.println("谢谢使用～");
-					System.exit(0);
-					break;
-				default:
-					refresh();
-					break;
-				}// end of switch
-
-			}// end of while
 		} finally {
 			if (scan != null) {
 				try {
@@ -78,16 +56,278 @@ public class Client {
 
 	}
 
+	private void initClient(Scanner scan) {
+		if (!fileIsExist("user_info")) {
+
+			System.out.println("首先，完善自己的个人资料:");
+
+			// 初始化用户信息
+			initUserInfo(scan);
+
+			Tools.WriteToFile.writeFileByName("user_info",
+					Tools.WriteToFile.KIND_USER_INFO);
+
+			refresh();
+		} else {
+			Tools.ReadFromFile.readFileByLines("user_info",
+					Tools.ReadFromFile.KIND_USER_INFO);
+		}
+
+		// 显示个人信息
+		showUserInfo();
+
+		System.out.print("进入主菜单(yes/no)> ");
+		String yesString = scan.nextLine();
+		if (yesString.equals("no")) {
+			System.out.println("系统正在退出中，请稍等...");
+			System.out.print("谢谢使用～");
+			System.exit(0);
+		}
+	}
+
+	// 初始化用户信息
+	private void initUserInfo(Scanner scan) {
+		System.out.print("姓名> ");
+		userName = scan.nextLine();
+		System.out.print("性别> ");
+		userGender = scan.nextLine();
+		System.out.print("生日[xxxx-xx-xx]> ");
+		userBirth = scan.nextLine();
+		System.out.print("手机号码 1> ");
+		userPhoneNum = scan.nextLine();
+		System.out.print("手机号码 2(没有填“无”)> ");
+		userPhoneNum2 = scan.nextLine();
+		System.out.print("QQ号码(没有填“无”)> ");
+		userQQNum = scan.nextLine();
+		System.out.print("所在地> ");
+		userLocation = scan.nextLine();
+		System.out.println();
+		System.out.println("数据添加成功!");
+	}
+
+	private void showUserInfo() {
+		System.out.println("-------------- 个人信息 --------------\n");
+		System.out.println("- 姓名：" + userName + " -");
+		System.out.println("- 性别：" + userGender + " -");
+		System.out.println("- 生日：" + userBirth + " -");
+		System.out.println("- 手机号码 1：" + userPhoneNum + " -");
+		System.out.println("- 手机号码 2：" + userPhoneNum2 + " -");
+		System.out.println("- QQ号码：" + userQQNum + " -");
+		System.out.println("- 所在地：" + userLocation + " -\n");
+		System.out.println("-------------------------------------\n");
+	}
+
+	// 程序主循环体
+	private void mainLoop(Scanner scan) {
+		String userKey;
+		while (true) {
+			refresh();
+
+			System.out.println("       主菜单");
+			System.out.println("--------------------\n");
+			System.out.println("选项：");
+			System.out.println("   1.显示个人信息");
+			System.out.println("   2.导入通讯录");
+			System.out.println("   3.显示通讯录");
+			System.out.println("   0.退出\n");
+			System.out.println("请用户选择[1, 2, 3, 0]");
+			System.out.print(userName + "@主菜单> ");
+
+			userKey = scan.nextLine();
+
+			switch (userKey) {
+			case "1":
+				optShowUserInfo(scan);
+				break;
+			case "2":
+				optImportCon(scan);
+				break;
+			case "3":
+				refresh();
+
+				System.out.println("        通讯录");
+				System.out.println("--------------------\n");
+				
+				// 如果还未导入数据
+				if (contacts == null || group == null) {
+					System.out.println("未导入通讯录，按任意键返回主菜单");
+					System.out.print(userName + "@主菜单\\显示通讯录> ");
+					scan.nextLine();
+					break;
+				}
+
+				HashMap<Integer, People> temp = contacts;
+
+				Iterator<Entry<Integer, String>> iter = group.entrySet()
+						.iterator();
+				while (iter.hasNext()) {
+					Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
+							.next();
+					System.out.println("      " + entry.getValue());
+					System.out.println("--------------------");
+
+					Iterator<Entry<Integer, People>> tempIter = temp.entrySet()
+							.iterator();
+					while (tempIter.hasNext()) {
+						Map.Entry<Integer, People> tempEntry = (Map.Entry<Integer, People>) tempIter
+								.next();
+						if (tempEntry.getValue().getGroup() == entry.getKey()) {
+							System.out.println(((People) tempEntry.getValue())
+									.toString());
+//							temp.remove(tempEntry.getKey());
+						}
+					}
+					System.out.println();
+				}// end of while
+				
+				System.out.println("选项：");
+				System.out.println("   0.返回主菜单\n");
+				System.out.print(userName + "@主菜单\\显示通讯录> ");
+				scan.nextLine();
+
+				break;
+			case "0":
+				optExitSys();
+				break;
+			default:
+				refresh();
+				break;
+			}// end of switch
+
+		}
+	}
+
+	// 退出系统选项
+	private void optExitSys() {
+		refresh();
+		System.out.println("系统正在退出中，请稍等...");
+		System.out.print("谢谢使用～");
+		System.exit(0);
+	}
+
+	// 导入信息选项
+	private void optImportCon(Scanner scan) {
+		if (group == null) {
+			group = new HashMap<Integer, String>();
+		}
+		if (contacts == null) {
+			contacts = new HashMap<Integer, People>();
+		}
+		refresh();
+		importAdd(scan);
+	}
+
+	// 显示用户信息选项
+	private void optShowUserInfo(Scanner scan) {
+		refresh();
+		showUserInfo();
+		System.out.println("选项：");
+		System.out.println("  1.修改个人信息");
+		System.out.println("  2.返回主菜单\n");
+		System.out.print(userName + "@主菜单\\个人信息> ");
+		String pressKey = scan.nextLine();
+		// 修改个人信息
+		if (pressKey.equals("1")) {
+			refresh();
+			System.out.println("     修改个人信息");
+			System.out.println("--------------------\n");
+			System.out.println("修改选项：");
+			System.out.println("   1.姓名");
+			System.out.println("   2.性别");
+			System.out.println("   3.生日");
+			System.out.println("   4.电话号码 1");
+			System.out.println("   5.电话号码 2");
+			System.out.println("   6.QQ号码");
+			System.out.println("   7.所在地");
+			System.out.println("   0.全部重置\n");
+			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息> ");
+			pressKey = scan.nextLine();
+			switch (pressKey) {
+			case "1":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入姓名：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改姓名> ");
+				userName = scan.nextLine();
+				break;
+			case "2":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入性别：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改性别> ");
+				userGender = scan.nextLine();
+				break;
+			case "3":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入生日[xxxx-xx-xx]：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改生日> ");
+				userBirth = scan.nextLine();
+				break;
+			case "4":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入手机号码：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改手机号码 1> ");
+				userPhoneNum = scan.nextLine();
+				break;
+			case "5":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入手机号码：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改手机号码 2> ");
+				userPhoneNum2 = scan.nextLine();
+				break;
+			case "6":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入QQ号码：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改QQ号码> ");
+				userQQNum = scan.nextLine();
+				break;
+			case "7":
+				refresh();
+				System.out.println("     修改个人信息");
+				System.out.println("--------------------\n");
+				System.out.println("请输入所在地：");
+				System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改所在地> ");
+				userLocation = scan.nextLine();
+				break;
+			case "0":
+				initUserInfo(scan);
+				break;
+			}
+
+			// 将用户信息写入文件
+			Tools.WriteToFile.writeFileByName("user_info",
+					Tools.WriteToFile.KIND_USER_INFO);
+		}
+	}
+
+	// 导入通讯录
 	private void importAdd(Scanner scan) {
 		refresh(1);
-
+		System.out.println("      导入通讯录");
+		System.out.println("--------------------\n");
 		System.out.println("1)导入分组信息：");
-		System.out.print("   请输入文件名[Group.txt]： \nroot@主界面\\导入通讯录> ");
+		System.out.println("   请输入文件名[Group.txt]：");
+		System.out.print(userName + "@主菜单\\导入通讯录\\导入分组信息> ");
 		String groupFileName = scan.nextLine();
-		Tools.ReadFromFile.readFileByLines(groupFileName, KIND_GROUP);
-		
-		
-		
+
+		while (!fileIsExist(groupFileName)) {
+			System.out.println("   文件名输入有误，请重新输入");
+			System.out.print(userName + "@主菜单\\导入通讯录\\导入分组信息> ");
+			groupFileName = scan.nextLine();
+		}
+
+		Tools.ReadFromFile.readFileByLines(groupFileName,
+				Tools.ReadFromFile.KIND_GROUP);
 		refresh();
 		System.out.println("正在导入分组信息，请稍后...");
 		refresh();
@@ -101,10 +341,21 @@ public class Client {
 		}
 
 		while (true) {
-			System.out.println("\n\n2)导入联系人信息：");
-			System.out.print("   请输入文件名[Contacts.txt]： \nroot@主界面\\导入通讯录> ");
+			System.out.println("\n      导入通讯录");
+			System.out.println("--------------------\n");
+			System.out.println("2)导入联系人信息：");
+			System.out.println("   请输入文件名[Contacts.txt]：");
+			System.out.print(userName + "@主菜单\\导入通讯录\\导入联系人> ");
 			String contactsFileName = scan.nextLine();
-			Tools.ReadFromFile.readFileByLines(contactsFileName, KIND_CONTACTS);
+
+			while (!fileIsExist(contactsFileName)) {
+				System.out.println("   文件名输入有误，请重新输入");
+				System.out.print(userName + "@主菜单\\导入通讯录\\导入联系人> ");
+				contactsFileName = scan.nextLine();
+			}
+
+			Tools.ReadFromFile.readFileByLines(contactsFileName,
+					Tools.ReadFromFile.KIND_CONTACTS);
 			refresh();
 			System.out.println("正在导入联系人信息，请稍后...");
 			refresh();
@@ -117,22 +368,34 @@ public class Client {
 				System.out.println(((People) entry.getValue()).toString());
 			}
 
-			System.out.println("\n");
+			System.out.println("\n      导入通讯录");
+			System.out.println("--------------------\n");
+			System.out.println("选项：");
 			System.out.println("  1.继续导入联系人");
 			System.out.println("  2.返回主菜单");
-			System.out.print("root@主界面\\导入通讯录> ");
-			
+			System.out.print(userName + "@主菜单\\导入通讯录> ");
+
 			String key = scan.nextLine();
-			
+
 			if (key.equals("1")) {
 				continue;
-			} 
+			}
 			if (key.equals("2")) {
 				refresh();
 				break;
 			}
 		}
 		// refresh();
+	}
+
+	// 判断一个文件是否存在
+	private boolean fileIsExist(String filename) {
+		File file = new File(filename);
+		if (file.exists()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	// 刷新控制台

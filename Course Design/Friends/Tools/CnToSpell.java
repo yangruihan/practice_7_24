@@ -8,6 +8,9 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 public class CnToSpell {
+	/**
+	 * ClassName:CnToSpell
+	 */
 
 	/**
 	 * 将汉字转换为全拼

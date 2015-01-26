@@ -81,14 +81,14 @@ public class People {
 	// //////////////////////////////////////////////////////////////////
 	//
 	// get && set methods
-	public static int getPEOPLE_NUMBER() {
-		return PEOPLE_NUMBER;
-	}
 	
 	public String getHeadChar() {
 		return this.nameHeadChar;
 	}
 
+	public static int getPEOPLE_NUMBER() {
+		return PEOPLE_NUMBER;
+	}
 
 	public String getGroupName() {
 		return groupName;

@@ -48,6 +48,13 @@ public class WriteToFile {
 							+ entry.getValue().getLocation());
 				}
 			}
+			if (kind == KIND_GROUP_INFO) {
+				Iterator<Entry<Integer, String>> iter = Client.group.entrySet().iterator();
+				while (iter.hasNext()) {
+ 					Entry<Integer, String> entry = iter.next();
+ 					p.println(entry.getKey() + " " +entry.getValue());
+				}
+			}
 
 			txtFile.close();
 			p.close();

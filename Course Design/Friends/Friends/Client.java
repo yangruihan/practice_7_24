@@ -102,10 +102,10 @@ public class Client {
 				refresh();
 				System.out
 						.print("正在从默认文件(Group.txt, Contacts.txt)中导入数据，请稍等...");
-				Thread.sleep(500);
+				Thread.sleep(400);
 				refresh();
 				System.out.print("导入成功");
-				Thread.sleep(300);
+				Thread.sleep(200);
 			}
 		}
 	}
@@ -459,22 +459,34 @@ public class Client {
 		int i = 0;
 		refresh();
 
-		Iterator<Entry<Integer, People>> iter = contacts.entrySet().iterator();
-		while (iter.hasNext()) {
-			Entry<Integer, People> entry = iter.next();
-			if (String.valueOf(entry.getKey()).equals(searchSecondContent)) {
-				System.out.println("      查找联系人");
-				System.out.println("--------------------\n");
-				System.out.println("查找结果：");
-				System.out.println("   " + (i + 1) + "."
-						+ ((People) entry.getValue()).getName() + " "
-						+ ((People) entry.getValue()).getGender() + " "
-						+ ((People) entry.getValue()).getPhoneNum1() + " "
-						+ ((People) entry.getValue()).getGroupName());
-				IDary[i++] = entry.getKey();
-				break;
-			}
-		}
+		People temp = contacts.get(Integer.parseInt(searchSecondContent));
+
+		System.out.println("      查找联系人");
+		System.out.println("--------------------\n");
+		System.out.println("查找结果：");
+		System.out.println();
+		System.out.println("   " + (i + 1) + "." + temp.getName() + " "
+				+ temp.getGender() + " " + temp.getPhoneNum1() + " "
+				+ temp.getGroupName());
+		IDary[i++] = Integer.parseInt(searchSecondContent);
+
+		// Iterator<Entry<Integer, People>> iter =
+		// contacts.entrySet().iterator();
+		// while (iter.hasNext()) {
+		// Entry<Integer, People> entry = iter.next();
+		// if (String.valueOf(entry.getKey()).equals(searchSecondContent)) {
+		// System.out.println("      查找联系人");
+		// System.out.println("--------------------\n");
+		// System.out.println("查找结果：");
+		// System.out.println("   " + (i + 1) + "."
+		// + ((People) entry.getValue()).getName() + " "
+		// + ((People) entry.getValue()).getGender() + " "
+		// + ((People) entry.getValue()).getPhoneNum1() + " "
+		// + ((People) entry.getValue()).getGroupName());
+		// IDary[i++] = entry.getKey();
+		// break;
+		// }
+		// }
 		return i;
 	}
 
@@ -571,11 +583,13 @@ public class Client {
 				System.out.println("      添加联系人");
 				System.out.println("--------------------\n");
 				System.out.println("1.分组(从下列中选取一项，填序号)\n");
-				Iterator<Entry<Integer, String>> iter3 = group.entrySet().iterator();
+				Iterator<Entry<Integer, String>> iter3 = group.entrySet()
+						.iterator();
 				while (iter3.hasNext()) {
 					Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter3
 							.next();
-					System.out.println("  " + entry.getKey() + ") " + entry.getValue());
+					System.out.println("  " + entry.getKey() + ") "
+							+ entry.getValue());
 				}
 				System.out.println("\n2.姓名");
 				System.out.println("3.性别");
@@ -597,15 +611,16 @@ public class Client {
 						arg[6], arg[7]);
 				contacts.put(newPeople.getIDNumber(), newPeople);
 				refresh();
-				
+
 				System.out.println("添加成功\n");
 				System.out.println("      新联系人");
-				System.out.println(contacts.get(newPeople.getIDNumber()).toString());
+				System.out.println(contacts.get(newPeople.getIDNumber())
+						.toString());
 				System.out.println("选项：");
 				System.out.println("   0.返回主菜单\n");
 				System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
 				scan.nextLine();
-			} 
+			}
 		}
 	}
 
@@ -699,9 +714,16 @@ public class Client {
 	// 退出系统选项
 	private void optExitSys() {
 		refresh();
-		System.out.println("系统正在退出中，请稍等...");
+		System.out.print("系统正在退出中，请稍等...");
 		Tools.WriteToFile.writeFileByName("Contacts.txt",
 				Tools.WriteToFile.KIND_CON_INFO);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		refresh();
 		System.out.print("谢谢使用～");
 		System.exit(0);
 	}

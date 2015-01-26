@@ -7,13 +7,32 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Runnable {
 
 	// 用来存放分组信息的hashmap
 	public static HashMap<Integer, String> group = null;
 
 	// 用来存放联系人的hashmap
 	public static HashMap<Integer, People> contacts = null;
+
+	// 存入按不同类型排序的联系人ID
+	public int[] conNameAry;
+	public int[] conNamePinyinAry;
+	public int[] conNameHeadCharAry;
+	public int[] conPhone1Ary;
+	public int[] conPhone2Ary;
+	public int[] conQQAry;
+	public int[] conLocationAry;
+	public int[][] conGroupAry;
+
+	// 排序类型
+	public final int SORT_KIND_NAME = 10001;
+	public final int SORT_KIND_PINYIN = SORT_KIND_NAME + 1;
+	public final int SORT_KIND_HEADCHAR = SORT_KIND_PINYIN + 1;
+	public final int SORT_KIND_PHONE1 = SORT_KIND_HEADCHAR + 1;
+	public final int SORT_KIND_PHONE2 = SORT_KIND_PHONE1 + 1;
+	public final int SORT_KIND_QQNUM = SORT_KIND_PHONE2 + 1;
+	public final int SORT_KIND_LOCATION = SORT_KIND_QQNUM + 1;
 
 	// 用户信息
 	public static String userName;
@@ -26,12 +45,14 @@ public class Client {
 
 	public String searchSecondContent = null;
 
+	public boolean importDone = false;
+
 	public Client() {
 
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////
-	public void run() throws InterruptedException {
+	public void go() throws InterruptedException {
 		Scanner scan = new Scanner(System.in);
 
 		try {
@@ -60,6 +81,7 @@ public class Client {
 	// /////////////////////////////////////////////////////////////////////////////
 
 	private void initClient(Scanner scan) throws InterruptedException {
+
 		if (!fileIsExist("user_info.lib")) {
 
 			System.out.println("首先，完善自己的个人资料:");
@@ -99,6 +121,15 @@ public class Client {
 				Tools.ReadFromFile.readFileByLines("Contacts.txt",
 						Tools.ReadFromFile.KIND_CONTACTS);
 
+				// 初始化数组
+				conNameAry = new int[contacts.size()];
+				conNamePinyinAry = new int[contacts.size()];
+				conNameHeadCharAry = new int[contacts.size()];
+				conPhone1Ary = new int[contacts.size()];
+				conPhone2Ary = new int[contacts.size()];
+				conQQAry = new int[contacts.size()];
+				conLocationAry = new int[contacts.size()];
+
 				refresh();
 				System.out
 						.print("正在从默认文件(Group.txt, Contacts.txt)中导入数据，请稍等...");
@@ -106,6 +137,8 @@ public class Client {
 				refresh();
 				System.out.print("导入成功");
 				Thread.sleep(200);
+
+				importDone = true;
 			}
 		}
 	}
@@ -179,6 +212,12 @@ public class Client {
 	// 程序主循环体
 	private void mainLoop(Scanner scan) {
 		String userKey;
+
+		if (importDone) {
+			Thread sortContacts = new Thread(this);
+			sortContacts.start();
+		}
+
 		while (true) {
 			refresh();
 
@@ -722,7 +761,7 @@ public class Client {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		refresh();
 		System.out.print("谢谢使用～");
 		System.exit(0);
@@ -1020,6 +1059,9 @@ public class Client {
 				System.out.println(((People) entry.getValue()).toString());
 			}
 
+			// 更改标记
+			importDone = true;
+
 			System.out.println("导入成功...\n");
 
 			System.out.println("\n      导入通讯录");
@@ -1064,9 +1106,116 @@ public class Client {
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException {
-		Client client = new Client();
-		client.run();
+	// 实现按不同类型排序的线程
+	@Override
+	public void run() {
+		// conGroupAry = new int[group.size()][];
+
+		for (int i = 0; i < contacts.size(); i++) {
+			conNameAry[i] = i + 1;
+			conNamePinyinAry[i] = i + 1;
+			conNameHeadCharAry[i] = i + 1;
+			conPhone1Ary[i] = i + 1;
+			conPhone2Ary[i] = i + 1;
+			conQQAry[i] = i + 1;
+			conLocationAry[i] = i + 1;
+		}
+
+		for (int i = 0; i < conNameAry.length; i++) {
+			System.out.print(conNameAry[i] + " ");
+		}
+		System.out.println();
+
+		// quick(conNameAry, "Name");
+
+		for (int i = 0; i < conNameAry.length; i++) {
+			System.out.print(conNameAry[i] + " ");
+		}
+		System.out.println();
+
 	}
 
+	// 快速排序
+	public void quick(int[] list, String kind) {
+		if (list.length > 0) { // 查看数组是否为空
+			_quickSort(list, 0, list.length - 1, kind);
+		}
+	}
+
+	private void _quickSort(int[] list, int low, int high, String kind) {
+		if (low < high) {
+			int middle = getMiddle(list, low, high, kind); // 将list数组进行一分为二
+			_quickSort(list, low, middle - 1, kind); // 对低字表进行递归排序
+			_quickSort(list, middle + 1, high, kind); // 对高字表进行递归排序
+		}
+	}
+
+	private int getMiddle(int[] list, int low, int high, String kind) {
+		int tmpInt = list[low];
+		String tmp = getItem(list[low], kind);
+		while (low < high) {
+			while (low < high && (getItem(high, kind).compareTo(tmp) >= 0)) {
+				high--;
+			}
+			list[low] = list[high];
+			while (low < high && (getItem(low, kind).compareTo(tmp) < 0)) {
+				low++;
+			}
+			list[high] = list[low];
+		}
+		list[low] = tmpInt;
+		return low;
+		// int tmp = list[low]; //数组的第一个作为中轴
+		// while (low < high) {
+		// while (low < high && list[high] > tmp) {
+		// high--;
+		// }
+		// list[low] = list[high]; //比中轴小的记录移到低端
+		// while (low < high && list[low] < tmp) {
+		// low++;
+		// }
+		// list[high] = list[low]; //比中轴大的记录移到高端
+		// }
+		// list[low] = tmp; //中轴记录到尾
+		// return low; //返回中轴的位置
+	}
+
+	private String getItem(int key, String kind) {
+		if (contacts == null || contacts.size() == 0) {
+			return null;
+		}
+		switch (kind) {
+		case "Name":
+			return contacts.get(key).getName();
+		case "Group":
+			return String.valueOf(contacts.get(key).getGroup());
+		case "Gender":
+			return contacts.get(key).getGender();
+		case "ID":
+			return String.valueOf(contacts.get(key).getIDNumber());
+		case "NamePinyin":
+			return contacts.get(key).getNamePinyin();
+		case "NameHeadChar":
+			return contacts.get(key).getHeadChar();
+		case "PhoneNum1":
+			return contacts.get(key).getPhoneNum1();
+		case "PhoneNum2":
+			return contacts.get(key).getPhoneNum2();
+		case "QQNum":
+			return contacts.get(key).getQQNum();
+		case "Location":
+			return contacts.get(key).getLocation();
+		case "GroupName":
+			return contacts.get(key).getGroupName();
+		case "Birth":
+			return contacts.get(key).getBirthday().toString();
+		default:
+			return null;
+		}
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		Client client = new Client();
+		client.go();
+	}
 }

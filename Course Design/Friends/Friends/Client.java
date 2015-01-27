@@ -54,6 +54,7 @@ public class Client implements Runnable {
 	// 写入写出的群组文件名及联系人文件名
 	public final static String groupFileName = "Group.txt";
 	public final static String contactsFileName = "Contacts.txt";
+	public final static String userInfoFileName = "user_info.lib";
 
 	public Client() {
 
@@ -215,19 +216,19 @@ public class Client implements Runnable {
 
 		initHashMap();
 
-		if (!fileIsExist("user_info.lib")) {
+		if (!fileIsExist(userInfoFileName)) {
 
 			System.out.println("首先，完善自己的个人资料:");
 
 			// 初始化用户信息
 			initUserInfo(scan);
 
-			Tools.WriteToFile.writeFileByName("user_info.lib",
+			Tools.WriteToFile.writeFileByName(userInfoFileName,
 					Tools.WriteToFile.KIND_USER_INFO);
 
 			refresh();
 		} else {
-			Tools.ReadFromFile.readFileByLines("user_info.lib",
+			Tools.ReadFromFile.readFileByLines(userInfoFileName,
 					Tools.ReadFromFile.KIND_USER_INFO);
 		}
 
@@ -240,7 +241,7 @@ public class Client implements Runnable {
 			optExitSys(scan);
 		} else {
 			// 默认从 Group.txt && Contacts.txt 导入数据
-			if (fileIsExist("Group.txt") && fileIsExist("Contacts.txt")) {
+			if (fileIsExist(groupFileName) && fileIsExist(contactsFileName)) {
 				if (group == null) {
 					group = new HashMap<Integer, String>();
 				}
@@ -441,7 +442,7 @@ public class Client implements Runnable {
 			System.out.println("--------------------\n");
 			System.out.println("   未能找到相关联系人");
 		}
-		
+
 		if (resultNumber == -1) {
 			return;
 		}
@@ -810,10 +811,10 @@ public class Client implements Runnable {
 		} else if (key.equals("5")) {
 			delGroup(scan);
 		} else {
-			
+
 		}
 	}
-	
+
 	// 删除分组
 	private void delGroup(Scanner scan) {
 		refresh();
@@ -852,13 +853,10 @@ public class Client implements Runnable {
 			System.out.println("   0.返回主菜单\n");
 			System.out.print(userName + "@主菜单\\显示通讯录\\删除分组> ");
 			str = scan.nextLine();
-			
-			
-			
-			
+
 		}
 	}
-	
+
 	private void removeContactByGroup(int key) {
 		for (int i = 1; i <= contacts.size(); i++) {
 			if (getItem(i, KIND_GROUP).equals(String.valueOf(key))) {
@@ -907,10 +905,7 @@ public class Client implements Runnable {
 			System.out.println("   0.返回主菜单\n");
 			System.out.print(userName + "@主菜单\\显示通讯录\\添加分组> ");
 			str = scan.nextLine();
-			
-			
-			
-			
+
 		} else {
 
 		}
@@ -927,7 +922,7 @@ public class Client implements Runnable {
 		System.out.println("   0.取消删除\n");
 		System.out.print(userName + "@主菜单\\显示通讯录\\删除联系人> ");
 		String delID = scan.nextLine();
-		
+
 		if (delID.equals("0")) {
 			return;
 		}
@@ -1011,7 +1006,7 @@ public class Client implements Runnable {
 		if (str.equals("0")) {
 			return;
 		}
-		
+
 		refresh();
 		System.out.println("      添加联系人");
 		System.out.println("--------------------\n");
@@ -1210,6 +1205,8 @@ public class Client implements Runnable {
 			Tools.WriteToFile.writeFileByName(groupFileName,
 					Tools.WriteToFile.KIND_GROUP_INFO);
 		}
+		Tools.WriteToFile.writeFileByName(userInfoFileName,
+				Tools.WriteToFile.KIND_USER_INFO);
 		try {
 			Thread.sleep(400);
 		} catch (InterruptedException e) {
@@ -1395,60 +1392,49 @@ public class Client implements Runnable {
 		System.out.println("   0.取消修改\n");
 		System.out.print(userName + "@主菜单\\个人信息\\修改个人信息> ");
 		pressKey = scan.nextLine();
+		
+		refresh();
+		System.out.println("     修改个人信息");
+		System.out.println("--------------------\n");
 		switch (pressKey) {
 		case "1":
-			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入姓名：");
+			System.out.println("请输入姓名：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改姓名> ");
 			userName = scan.nextLine();
 			break;
 		case "2":
 			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入性别：");
+			System.out.println("请输入性别：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改性别> ");
 			userGender = scan.nextLine();
 			break;
 		case "3":
 			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入生日[xxxx-xx-xx]：");
+			System.out.println("请输入生日[xxxx-xx-xx]：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改生日> ");
 			userBirth = scan.nextLine();
 			break;
 		case "4":
 			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入手机号码：");
+			System.out.println("请输入手机号码：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改手机号码 1> ");
 			userPhoneNum = scan.nextLine();
 			break;
 		case "5":
 			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入手机号码：");
+			System.out.println("请输入手机号码：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改手机号码 2> ");
 			userPhoneNum2 = scan.nextLine();
 			break;
 		case "6":
 			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入QQ号码：");
+			System.out.println("请输入QQ号码：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改QQ号码> ");
 			userQQNum = scan.nextLine();
 			break;
 		case "7":
 			refresh();
-			System.out.println("     修改个人信息");
-			System.out.println("--------------------\n");
-			System.out.println("请输入所在地：");
+			System.out.println("请输入所在地：\n");
 			System.out.print(userName + "@主菜单\\个人信息\\修改个人信息\\修改所在地> ");
 			userLocation = scan.nextLine();
 			break;
@@ -1472,6 +1458,7 @@ public class Client implements Runnable {
 		Tools.WriteToFile.writeFileByName("user_info",
 				Tools.WriteToFile.KIND_USER_INFO);
 
+		refresh();
 		System.out.println("*********************");
 		System.out.println("***** 修 改 成 功 *****");
 		System.out.println("*********************\n");

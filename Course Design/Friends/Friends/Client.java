@@ -1,6 +1,7 @@
 package Friends;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -181,7 +182,7 @@ public class Client implements Runnable {
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////
-	public void go() throws InterruptedException {
+	public void go() throws InterruptedException, IOException {
 		Scanner scan = new Scanner(System.in);
 
 		try {
@@ -212,7 +213,8 @@ public class Client implements Runnable {
 
 	// /////////////////////////////////////////////////////////////////////////////
 
-	private void initClient(Scanner scan) throws InterruptedException {
+	private void initClient(Scanner scan) throws InterruptedException,
+			IOException {
 
 		initHashMap();
 
@@ -222,6 +224,11 @@ public class Client implements Runnable {
 
 			// 初始化用户信息
 			initUserInfo(scan);
+
+			if (!fileIsExist(userInfoFileName)) {
+				File file = new File(userInfoFileName);
+				file.createNewFile();
+			}
 
 			Tools.WriteToFile.writeFileByName(userInfoFileName,
 					Tools.WriteToFile.KIND_USER_INFO);
@@ -240,6 +247,16 @@ public class Client implements Runnable {
 		if (yesString.equals("no")) {
 			optExitSys(scan);
 		} else {
+			if (!fileIsExist(groupFileName)) {
+				File file = new File(groupFileName);
+				file.createNewFile();
+			}
+
+			if (!fileIsExist(contactsFileName)) {
+				File file = new File(contactsFileName);
+				file.createNewFile();
+			}
+
 			// 默认从 Group.txt && Contacts.txt 导入数据
 			if (fileIsExist(groupFileName) && fileIsExist(contactsFileName)) {
 				if (group == null) {
@@ -248,20 +265,18 @@ public class Client implements Runnable {
 				if (contacts == null) {
 					contacts = new HashMap<Integer, People>();
 				}
+				refresh();
+				System.out
+						.print("正在从默认文件(Group.txt, Contacts.txt)中导入数据，请稍等...");
 				Tools.ReadFromFile.readFileByLines(groupFileName,
 						Tools.ReadFromFile.KIND_GROUP);
 				Tools.ReadFromFile.readFileByLines(contactsFileName,
 						Tools.ReadFromFile.KIND_CONTACTS);
 
 				refresh();
-				System.out
-						.print("正在从默认文件(Group.txt, Contacts.txt)中导入数据，请稍等...");
-				Thread.sleep(400);
-				refresh();
 				System.out.println("*********************");
 				System.out.println("***** 导 入 成 功 *****");
 				System.out.println("*********************");
-				Thread.sleep(200);
 			}
 		}
 	}
@@ -346,9 +361,10 @@ public class Client implements Runnable {
 			System.out.println("--------------------\n");
 			System.out.println("选项：");
 			System.out.println("   1.显示个人信息");
-			System.out.println("   2.导入通讯录");
-			System.out.println("   3.显示通讯录");
+			System.out.println("   2.导入联系人");
+			System.out.println("   3.显示联系人");
 			System.out.println("   4.查找联系人");
+			System.out.println("   5.重置通讯录");
 			System.out.println("   0.退出\n");
 			System.out.print(userName + "@主菜单> ");
 
@@ -367,6 +383,9 @@ public class Client implements Runnable {
 			case "4":
 				optSearchCon(scan);
 				break;
+			case "5":
+				optReSetCon(scan);
+				break;
 			case "0":
 				optExitSys(scan);
 				break;
@@ -380,6 +399,45 @@ public class Client implements Runnable {
 
 	// /////////////////////////////////////////////////////////////////////////////
 
+	// 重置通讯录选项
+	private void optReSetCon(Scanner scan) {
+		refresh();
+		System.out.println("      重置通讯录");
+		System.out.println("--------------------\n");
+		System.out.println("警告：");
+		System.out.println("   这将会删除通讯录中的所有信息，此操作不可逆\n");
+		System.out.println("选项：");
+		System.out.println("   1.确定重置");
+		System.out.println("   0.取消重置\n");
+		System.out.print(userName + "@主菜单\\重置通讯录> ");
+		String pressKey = scan.nextLine();
+		if (pressKey.equals("1")) {
+			// 清空联系人
+			clearCon();
+		}
+	}
+
+	// 清空联系人
+	private void clearCon() {
+		contacts.clear();
+		group.clear();
+		NameMap.clear();
+		NamePinyinMap.clear();
+		NameHeadCharMap.clear();
+		BirthMap.clear();
+		Phone1Map.clear();
+		Phone2Map.clear();
+		QQNumMap.clear();
+		LocationMap.clear();
+		GenderMap.clear();
+		People.setPEOPLE_NUMBER(0);
+		Tools.WriteToFile.writeFileByName(contactsFileName,
+				Tools.WriteToFile.KIND_CON_INFO);
+		Tools.WriteToFile.writeFileByName(groupFileName,
+				Tools.WriteToFile.KIND_GROUP_INFO);
+	}
+
+	// 查找联系人选项
 	private void optSearchCon(Scanner scan) {
 		refresh();
 
@@ -411,26 +469,45 @@ public class Client implements Runnable {
 		int[] IDary = new int[contacts.size()];
 		int resultNumber = 0;
 		switch (key) {
+
+		// 根据ID查找
 		case "1":
 			resultNumber = searchConByID(scan, IDary, times);
 			break;
+
+		// 根据群组查找 可优化
 		case "2":
 			resultNumber = searchConByGroup(scan, IDary, times);
 			break;
+
+		// 根据姓名查找
 		case "3":
 			resultNumber = searchConByName(scan, IDary, times);
 			break;
+
+		// 根据姓名拼音查找
 		case "4":
 			resultNumber = searchConByPinyin(scan, IDary, times);
 			break;
+
+		// 根据手机号码查找 目前只设计了根据一个手机号 还需修改
 		case "5":
 			resultNumber = searchConByPhone(scan, IDary, times);
 			break;
+
+		// 根据QQ号码查找
 		case "6":
 			resultNumber = searchConByQQ(scan, IDary, times);
 			break;
+
+		// 根据地理位置查找
 		case "7":
 			resultNumber = searchConByLoc(scan, IDary, times);
+			break;
+
+		// 根据关键词查找
+		case "9":
+			resultNumber = searchConByKey(scan, IDary, times);
 			break;
 		default:
 			return;
@@ -441,51 +518,59 @@ public class Client implements Runnable {
 			System.out.println("      查找联系人");
 			System.out.println("--------------------\n");
 			System.out.println("   未能找到相关联系人");
-		}
-
-		if (resultNumber == -1) {
-			return;
-		}
-
-		System.out.println("\n共 " + resultNumber + " 个结果");
-		System.out.println("\n选项：");
-		System.out.println("   1.查看详细信息");
-		System.out.println("   2.修改查询结果信息");
-		System.out.println("   9.继续查找");
-		System.out.println("   0.返回主菜单\n");
-		System.out.print(userName + "@主菜单\\查找联系人\\查找结果> ");
-		String optkey = scan.nextLine();
-		if (optkey.equals("9")) {
-			optSearchCon(scan);
-		} else if (optkey.equals("2")) {
-			// 修改查询结果信息
-			changeResultInfo(scan, key, times, IDary, resultNumber);
-		} else if (optkey.equals("1")) {
-			refresh();
-			for (int i = 0; i < resultNumber; i++) {
-				System.out.println("         第 " + (i + 1) + " 个结果");
-				System.out
-						.println(((People) contacts.get(IDary[i])).toString());
+			System.out.println("\n选项：");
+			System.out.println("   1.继续查找");
+			System.out.println("   0.返回主菜单\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\查找结果> ");
+			String optkey = scan.nextLine();
+			if (optkey.equals("1")) {
+				optSearchCon(scan);
+			} else {
+				return;
 			}
+		} else if (resultNumber == -1) {
+			return;
+		} else if (resultNumber != 0) {
 			System.out.println("\n共 " + resultNumber + " 个结果");
 			System.out.println("\n选项：");
-			System.out.println("   1.修改查询结果信息");
+			System.out.println("   1.查看详细信息");
+			System.out.println("   2.修改查询结果信息");
 			System.out.println("   9.继续查找");
 			System.out.println("   0.返回主菜单\n");
-			System.out.print(userName + "@主菜单\\查找联系人\\查找结果\\详细信息> ");
-			String dShowUserInfo = scan.nextLine();
-			if (dShowUserInfo.equals("9")) {
+			System.out.print(userName + "@主菜单\\查找联系人\\查找结果> ");
+			String optkey = scan.nextLine();
+			if (optkey.equals("9")) {
 				optSearchCon(scan);
-			} else if (dShowUserInfo.equals("1")) {
+			} else if (optkey.equals("2")) {
 				// 修改查询结果信息
 				changeResultInfo(scan, key, times, IDary, resultNumber);
+			} else if (optkey.equals("1")) {
+				refresh();
+				for (int i = 0; i < resultNumber; i++) {
+					System.out.println("         第 " + (i + 1) + " 个结果");
+					System.out.println(((People) contacts.get(IDary[i]))
+							.toString());
+				}
+				System.out.println("\n共 " + resultNumber + " 个结果");
+				System.out.println("\n选项：");
+				System.out.println("   1.修改查询结果信息");
+				System.out.println("   9.继续查找");
+				System.out.println("   0.返回主菜单\n");
+				System.out.print(userName + "@主菜单\\查找联系人\\查找结果\\详细信息> ");
+				String dShowUserInfo = scan.nextLine();
+				if (dShowUserInfo.equals("9")) {
+					optSearchCon(scan);
+				} else if (dShowUserInfo.equals("1")) {
+					// 修改查询结果信息
+					changeResultInfo(scan, key, times, IDary, resultNumber);
+				} else {
+
+				} // end of 1 2 0
+
 			} else {
 
-			} // end of 1 2 0
-
-		} else {
-
-		}// key 1 2 9
+			}// key 1 2 9
+		}
 	}
 
 	// 修改查询结果信息
@@ -535,6 +620,12 @@ public class Client implements Runnable {
 		}
 	}
 
+	// 通过关键词查找
+	private int searchConByKey(Scanner scan, int[] IDary, int times) {
+
+		return 0;
+	}
+
 	// 通过地理位置查找
 	private int searchConByLoc(Scanner scan, int[] IDary, int times) {
 		if (times == 1) {
@@ -550,6 +641,10 @@ public class Client implements Runnable {
 			}
 		}
 		refresh();
+
+		if (LocationMap.get(searchSecondContent) == null) {
+			return 0;
+		}
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
@@ -577,6 +672,10 @@ public class Client implements Runnable {
 		}
 		refresh();
 
+		if (QQNumMap.get(searchSecondContent) == null) {
+			return 0;
+		}
+
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
 		System.out.println("查找结果：");
@@ -602,6 +701,10 @@ public class Client implements Runnable {
 			}
 		}
 		refresh();
+
+		if (Phone1Map.get(searchSecondContent) == null) {
+			return 0;
+		}
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
@@ -629,6 +732,10 @@ public class Client implements Runnable {
 		}
 		refresh();
 
+		if (NamePinyinMap.get(searchSecondContent) == null) {
+			return 0;
+		}
+
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
 		System.out.println("查找结果：");
@@ -654,6 +761,10 @@ public class Client implements Runnable {
 			}
 		}
 		refresh();
+
+		if (NameMap.get(searchSecondContent) == null) {
+			return 0;
+		}
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
@@ -701,8 +812,8 @@ public class Client implements Runnable {
 			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
 					.next();
 			if (String.valueOf(entry.getKey()).equals(searchSecondContent)) {
-				System.out.println("         " + entry.getValue());
-				System.out.println("------------------------");
+				System.out.println("              " + entry.getValue());
+				System.out.println("-----------------------------------\n");
 
 				Iterator<Entry<Integer, People>> tempIter = contacts.entrySet()
 						.iterator();
@@ -710,11 +821,13 @@ public class Client implements Runnable {
 					Map.Entry<Integer, People> tempEntry = (Map.Entry<Integer, People>) tempIter
 							.next();
 					if (tempEntry.getValue().getGroup() == entry.getKey()) {
-						System.out.println("   "
+						System.out.println("ID:"
+								+ tempEntry.getKey()
+								+ "\t"
 								+ ((People) tempEntry.getValue()).getName()
-								+ " "
+								+ "\t"
 								+ ((People) tempEntry.getValue()).getGender()
-								+ " "
+								+ "\t"
 								+ ((People) tempEntry.getValue())
 										.getPhoneNum1());
 						IDary[i++] = tempEntry.getKey();
@@ -742,6 +855,21 @@ public class Client implements Runnable {
 		int i = 0;
 		refresh();
 
+		while (!isNum(searchSecondContent)) {
+			refresh();
+			System.out.println("      查找联系人");
+			System.out.println("--------------------\n");
+			System.out.println("请输入正确的联系人编号(不能包含字母或标点)\n");
+			System.out.println("   0.取消查找\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\编号查找> ");
+			searchSecondContent = scan.nextLine();
+			if (searchSecondContent.equals("0")) {
+				return -1;
+			}
+		}
+		
+		refresh();
+
 		People temp = contacts.get(Integer.parseInt(searchSecondContent));
 
 		System.out.println("      查找联系人");
@@ -761,15 +889,15 @@ public class Client implements Runnable {
 		refresh();
 
 		// 如果还未导入数据
-		if (contacts == null || group == null) {
-			System.out.println("       主菜单");
+		if (contacts.size() == 0) {
+			System.out.println("      显示联系人");
 			System.out.println("--------------------\n");
-			System.out.println("通讯录无数据，请先导入通讯录\n");
+			System.out.println("通讯录无数据，请先导入联系人\n");
 			System.out.println("选项：");
-			System.out.println("   1.导入通讯录");
+			System.out.println("   1.导入联系人");
 			System.out.println("   0.返回主菜单\n");
 
-			System.out.print(userName + "@主菜单\\显示通讯录> ");
+			System.out.print(userName + "@主菜单\\显示联系人> ");
 
 			String key = scan.nextLine();
 			// 导入通讯录
@@ -791,7 +919,7 @@ public class Client implements Runnable {
 		System.out.println("   4.添加分组");
 		System.out.println("   5.删除分组");
 		System.out.println("   0.返回主菜单\n");
-		System.out.print(userName + "@主菜单\\显示通讯录> ");
+		System.out.print(userName + "@主菜单\\显示联系人> ");
 		String key = scan.nextLine();
 		// 显示详细列表
 		if (key.equals("1")) {
@@ -799,7 +927,7 @@ public class Client implements Runnable {
 			showConByGroupD();
 			System.out.println("选项：");
 			System.out.println("   0.返回主菜单\n");
-			System.out.print(userName + "@主菜单\\显示通讯录\\显示详细信息> ");
+			System.out.print(userName + "@主菜单\\显示联系人\\显示详细信息> ");
 			scan.nextLine();
 		} else if (key.equals("2")) {
 			// 添加联系人
@@ -824,7 +952,7 @@ public class Client implements Runnable {
 		showGroup();
 		System.out.println("\n请键入要删除的分组序号\n");
 		System.out.println("   0.取消删除\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\删除分组> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\删除分组> ");
 		String groupID = scan.nextLine();
 		if (groupID.equals("0")) {
 			return;
@@ -837,7 +965,7 @@ public class Client implements Runnable {
 		System.out.println("选项：");
 		System.out.println("   1.确定删除");
 		System.out.println("   0.取消删除\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\删除分组> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\删除分组> ");
 		String str = scan.nextLine();
 		if (str.equals("1")) {
 			group.remove(Integer.parseInt(groupID));
@@ -851,7 +979,7 @@ public class Client implements Runnable {
 			showGroup();
 			System.out.println("\n选项：");
 			System.out.println("   0.返回主菜单\n");
-			System.out.print(userName + "@主菜单\\显示通讯录\\删除分组> ");
+			System.out.print(userName + "@主菜单\\显示联系人\\删除分组> ");
 			str = scan.nextLine();
 
 		}
@@ -877,7 +1005,7 @@ public class Client implements Runnable {
 		showGroup();
 		System.out.println("\n请键入新添加的分组名\n");
 		System.out.println("   0.取消添加\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\添加分组> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\添加分组> ");
 		String groupName = scan.nextLine();
 		if (groupName.equals("0")) {
 			return;
@@ -888,7 +1016,7 @@ public class Client implements Runnable {
 		System.out.println("选项：");
 		System.out.println("   1.确定添加");
 		System.out.println("   0.取消添加\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\添加分组> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\添加分组> ");
 		String str = scan.nextLine();
 		if (str.equals("1")) {
 			group.put(group.size() + 1, groupName);
@@ -903,7 +1031,7 @@ public class Client implements Runnable {
 			System.out.println("\n选项：");
 			System.out.println("   1.移动联系人到该分组");
 			System.out.println("   0.返回主菜单\n");
-			System.out.print(userName + "@主菜单\\显示通讯录\\添加分组> ");
+			System.out.print(userName + "@主菜单\\显示联系人\\添加分组> ");
 			str = scan.nextLine();
 
 		} else {
@@ -920,7 +1048,7 @@ public class Client implements Runnable {
 		showConByGroupR();
 		System.out.println("\n请选择要删除的联系人ID号\n");
 		System.out.println("   0.取消删除\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\删除联系人> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\删除联系人> ");
 		String delID = scan.nextLine();
 
 		if (delID.equals("0")) {
@@ -933,7 +1061,7 @@ public class Client implements Runnable {
 		System.out.println("选项：");
 		System.out.println("   1.确定删除");
 		System.out.println("   0.取消删除\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\删除联系人> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\删除联系人> ");
 
 		String pressKey = scan.nextLine();
 
@@ -955,7 +1083,7 @@ public class Client implements Runnable {
 			thread.start();
 			System.out.println("选项：");
 			System.out.println("   0.返回主菜单\n");
-			System.out.print(userName + "@主菜单\\显示通讯录\\删除联系人> ");
+			System.out.print(userName + "@主菜单\\显示联系人\\删除联系人> ");
 			String pressKey2 = scan.nextLine();
 			if (pressKey2.equals("0")) {
 
@@ -1000,7 +1128,7 @@ public class Client implements Runnable {
 		System.out.println("8.所在地__*__\n");
 		System.out.println("请键入上述内容，每项用空格分开\n注意：以上项中*项为必填项，其他项如为空则键入\"/\"\n");
 		System.out.println("   0.取消添加\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\添加联系人> ");
 		String str = scan.nextLine();
 
 		if (str.equals("0")) {
@@ -1014,7 +1142,7 @@ public class Client implements Runnable {
 		System.out.println("选项：");
 		System.out.println("   1.确定添加");
 		System.out.println("   0.取消添加\n");
-		System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+		System.out.print(userName + "@主菜单\\显示联系人\\添加联系人> ");
 
 		str = scan.nextLine();
 		if (str.equals("0")) {
@@ -1039,7 +1167,7 @@ public class Client implements Runnable {
 				System.out.println("8.所在地__*__\n");
 				System.out
 						.println("请键入上述内容，每项用空格分开\n注意：以上项中*项为必填项，其他项如为空则键入\"/\"\n");
-				System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+				System.out.print(userName + "@主菜单\\显示联系人\\添加联系人> ");
 				System.out.println("   0.取消添加\n");
 				str = scan.nextLine();
 				if (str.equals("0")) {
@@ -1075,7 +1203,7 @@ public class Client implements Runnable {
 					.println(contacts.get(newPeople.getIDNumber()).toString());
 			System.out.println("选项：");
 			System.out.println("   0.返回主菜单\n");
-			System.out.print(userName + "@主菜单\\显示通讯录\\添加联系人> ");
+			System.out.print(userName + "@主菜单\\显示联系人\\添加联系人> ");
 			scan.nextLine();
 		}
 	}
@@ -1207,11 +1335,6 @@ public class Client implements Runnable {
 		}
 		Tools.WriteToFile.writeFileByName(userInfoFileName,
 				Tools.WriteToFile.KIND_USER_INFO);
-		try {
-			Thread.sleep(400);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		if (scan != null) {
 			try {
@@ -1238,13 +1361,13 @@ public class Client implements Runnable {
 		}
 
 		refresh();
-		System.out.println("      导入通讯录");
+		System.out.println("      导入联系人");
 		System.out.println("--------------------\n");
 		System.out.println("选项：");
 		System.out.println("   0.取消导入\n");
 		System.out.println("1)导入分组信息：");
 		System.out.println("   请输入文件名[Group.txt]：\n");
-		System.out.print(userName + "@主菜单\\导入通讯录\\导入分组信息> ");
+		System.out.print(userName + "@主菜单\\导入联系人\\导入分组信息> ");
 		String str = scan.nextLine();
 		if (str.equals("0")) {
 			return;
@@ -1255,21 +1378,20 @@ public class Client implements Runnable {
 
 		while (!fileIsExist(str)) {
 			refresh();
-			System.out.println("      导入通讯录");
+			System.out.println("      导入联系人");
 			System.out.println("--------------------\n");
 			System.out.println("选项：");
 			System.out.println("   0.取消导入\n");
 			System.out.println("文件名输入有误，请重新输入[Group.txt]\n");
-			System.out.print(userName + "@主菜单\\导入通讯录\\导入分组信息> ");
+			System.out.print(userName + "@主菜单\\导入联系人\\导入分组信息> ");
 			str = scan.nextLine();
 			if (str.equals("0")) {
 				return;
 			}
 		}
-
-		Tools.ReadFromFile.readFileByLines(str, Tools.ReadFromFile.KIND_GROUP);
 		refresh();
-		System.out.println("正在导入分组信息，请稍后...");
+		System.out.print("正在导入分组信息，请稍后...");
+		Tools.ReadFromFile.readFileByLines(str, Tools.ReadFromFile.KIND_GROUP);
 		refresh();
 		Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -1284,13 +1406,13 @@ public class Client implements Runnable {
 
 		while (true) {
 			refresh();
-			System.out.println("\n      导入通讯录");
+			System.out.println("\n      导入联系人");
 			System.out.println("--------------------\n");
 			System.out.println("选项：");
 			System.out.println("   0.取消导入\n");
 			System.out.println("2)导入联系人信息：");
 			System.out.println("   请输入文件名[Contacts.txt]：\n");
-			System.out.print(userName + "@主菜单\\导入通讯录\\导入联系人> ");
+			System.out.print(userName + "@主菜单\\导入联系人\\导入联系人> ");
 			str = scan.nextLine();
 			if (str.equals("0")) {
 				return;
@@ -1302,41 +1424,46 @@ public class Client implements Runnable {
 
 			while (!fileIsExist(str)) {
 				refresh();
-				System.out.println("\n      导入通讯录");
+				System.out.println("\n      导入联系人");
 				System.out.println("--------------------\n");
 				System.out.println("选项：");
 				System.out.println("   0.取消导入\n");
 				System.out.println("文件名输入有误，请重新输入[Contacts.txt]\n");
-				System.out.print(userName + "@主菜单\\导入通讯录\\导入联系人> ");
+				System.out.print(userName + "@主菜单\\导入联系人\\导入联系人> ");
 				str = scan.nextLine();
 				if (str.equals("0")) {
 					return;
 				}
 			}
 
+			refresh();
+			System.out.print("正在导入联系人信息，请稍后...");
 			Tools.ReadFromFile.readFileByLines(str,
 					Tools.ReadFromFile.KIND_CONTACTS);
+
 			refresh();
-			System.out.println("正在导入联系人信息，请稍后...");
-			refresh();
-			Iterator<Entry<Integer, People>> iter2 = contacts.entrySet()
-					.iterator();
-			while (iter2.hasNext()) {
-				Map.Entry<Integer, People> entry = (Map.Entry<Integer, People>) iter2
-						.next();
-				System.out.println(((People) entry.getValue()).toString());
-			}
+			showConByGroupR();
+
+			Thread thread = new Thread(this);
+			thread.start();
+
+			// ///////////////////////////////////////////
+			Tools.WriteToFile.writeFileByName(groupFileName,
+					Tools.WriteToFile.KIND_GROUP_INFO);
+			Tools.WriteToFile.writeFileByName(contactsFileName,
+					Tools.WriteToFile.KIND_CON_INFO);
+			// ///////////////////////////////////////////
 
 			System.out.println("\n*********************");
 			System.out.println("***** 导 入 成 功 *****");
 			System.out.println("*********************\n");
 
-			System.out.println("\n      导入通讯录");
+			System.out.println("\n      导入联系人");
 			System.out.println("--------------------\n");
 			System.out.println("选项：");
 			System.out.println("   1.继续导入联系人");
 			System.out.println("   0.返回主菜单");
-			System.out.print(userName + "@主菜单\\导入通讯录> ");
+			System.out.print(userName + "@主菜单\\导入联系人> ");
 
 			String key = scan.nextLine();
 
@@ -1392,7 +1519,7 @@ public class Client implements Runnable {
 		System.out.println("   0.取消修改\n");
 		System.out.print(userName + "@主菜单\\个人信息\\修改个人信息> ");
 		pressKey = scan.nextLine();
-		
+
 		refresh();
 		System.out.println("     修改个人信息");
 		System.out.println("--------------------\n");
@@ -1581,6 +1708,14 @@ public class Client implements Runnable {
 		}
 	}
 
+	// 判断一个文件是否为空
+	private boolean fileIsEmpty(String filename) {
+		File file = new File(filename);
+		if (file.length() == 0)
+			return true;
+		return false;
+	}
+
 	// 刷新控制台
 	private void refresh() {
 		refresh(30);
@@ -1629,7 +1764,13 @@ public class Client implements Runnable {
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	// 判断一个字符串是否能转换成一个数字
+	private boolean isNum(String str) {
+		return str.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
+	}
+
+	public static void main(String[] args) throws InterruptedException,
+			IOException {
 		Client client = new Client();
 		client.go();
 	}

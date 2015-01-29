@@ -337,7 +337,6 @@ public class Client implements Runnable {
 				refresh();
 				break;
 			}// end of switch
-
 		}
 	}
 
@@ -1228,8 +1227,8 @@ public class Client implements Runnable {
 				System.out.println("8.所在地__*__\n");
 				System.out
 						.println("请键入上述内容，每项用空格分开\n注意：以上项中*项为必填项，其他项如为空则键入\"/\"\n");
-				System.out.print(userName + "@主菜单\\显示联系人\\添加联系人> ");
 				System.out.println("   0.取消添加\n");
+				System.out.print(userName + "@主菜单\\显示联系人\\添加联系人> ");
 				str = scan.nextLine();
 				if (str.equals("0")) {
 					return;

@@ -265,13 +265,14 @@ public class Client implements Runnable {
 
 		System.out.println("请选择分组");
 
-		Iterator<Entry<Integer, String>> iter2 = group.entrySet().iterator();
-		while (iter2.hasNext()) {
-			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
-					.next();
-			System.out
-					.println("   " + entry.getKey() + ": " + entry.getValue());
-		}
+		// Iterator<Entry<Integer, String>> iter2 = group.entrySet().iterator();
+		// while (iter2.hasNext()) {
+		// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
+		// .next();
+		// System.out
+		// .println("   " + entry.getKey() + ": " + entry.getValue());
+		// }
+		showGroup();
 
 		System.out.print("分组> ");
 		contacts.get(key).setGroup(Integer.parseInt(scan.nextLine()));
@@ -573,14 +574,16 @@ public class Client implements Runnable {
 					.println("请输入关键词[分组(G)|姓名(N)|性别(S)|生日(B)|电话号码(P)|QQ号码(Q)|所在地(L)]\n\n格式为[代号：内容](每个关键词之间用空格隔开)");
 			System.out.println("例如：S:男 B:1995-3-6 L:武汉\n");
 			System.out.println("以下是分组信息(填编号)：\n");
-			Iterator<Entry<Integer, String>> iter2 = group.entrySet()
-					.iterator();
-			while (iter2.hasNext()) {
-				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
-						.next();
-				System.out.println("   " + entry.getKey() + ": "
-						+ entry.getValue());
-			}
+			// Iterator<Entry<Integer, String>> iter2 = group.entrySet()
+			// .iterator();
+			// while (iter2.hasNext()) {
+			// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>)
+			// iter2
+			// .next();
+			// System.out.println("   " + entry.getKey() + ": "
+			// + entry.getValue());
+			// }
+			showGroup();
 
 			System.out.println("\n   0.取消查找\n");
 			System.out.print(userName + "@主菜单\\查找联系人\\关键词查找> ");
@@ -845,14 +848,16 @@ public class Client implements Runnable {
 			System.out.println("--------------------\n");
 			System.out.println("请选择分组");
 
-			Iterator<Entry<Integer, String>> iter2 = group.entrySet()
-					.iterator();
-			while (iter2.hasNext()) {
-				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
-						.next();
-				System.out.println("   " + entry.getKey() + ": "
-						+ entry.getValue());
-			}
+			// Iterator<Entry<Integer, String>> iter2 = group.entrySet()
+			// .iterator();
+			// while (iter2.hasNext()) {
+			// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>)
+			// iter2
+			// .next();
+			// System.out.println("   " + entry.getKey() + ": "
+			// + entry.getValue());
+			// }
+			showGroup();
 
 			System.out.println();
 			System.out.println("   0.取消查找\n");
@@ -1094,9 +1099,53 @@ public class Client implements Runnable {
 			System.out.print(userName + "@主菜单\\显示联系人\\添加分组> ");
 			str = scan.nextLine();
 
+			if (str.equals("1")) {
+				refresh();
+				System.out.println("      移动联系人");
+				System.out.println("--------------------\n");
+				showConByGroupR();
+				System.out.println("输入要移动的联系人编号(每个联系人之间用空格隔开)\n");
+				System.out.print(userName + "@主菜单\\显示联系人\\添加分组\\移动联系人> ");
+				String moveNum = scan.nextLine();
+				String[] nums = moveNum.split(" ");
+				for (int i = 0; i < nums.length; i++) {
+					contacts.get(Integer.parseInt(nums[i])).setGroup(
+							group.size());
+				}
+				Thread thread = new Thread(this);
+				thread.start();
+
+				refresh();
+				System.out.println("*********************");
+				System.out.println("***** 移 动 成 功 *****");
+				System.out.println("*********************\n");
+				System.out.println("              " + group.get(group.size()));
+				System.out.println("-----------------------------------");
+
+				int num = 0;
+				Iterator<Entry<Integer, People>> iter = contacts.entrySet()
+						.iterator();
+				while (iter.hasNext()) {
+					Entry<Integer, People> entry = iter.next();
+					if (entry.getValue().getGroup() == group.size()) {
+						System.out.println((++num) + "."
+								+ entry.getValue().getName() + " "
+								+ entry.getValue().getGender() + " "
+								+ entry.getValue().getPhoneNum1() + " "
+								+ entry.getValue().getGroupName());
+					}
+				}
+				System.out.println("\n选项：");
+				System.out.println("   0.返回主菜单\n");
+				System.out.print(userName + "@主菜单\\显示联系人\\添加分组\\移动联系人> ");
+				String str2 = scan.nextLine();
+
+			} else {
+
+			}// yidong
 		} else {
 
-		}
+		} // tianjia
 	}
 
 	// 删除联系人
@@ -1169,6 +1218,8 @@ public class Client implements Runnable {
 				Tools.ReadFromFile.KIND_GROUP);
 		Tools.ReadFromFile.readFileByLines(contactsFileName,
 				Tools.ReadFromFile.KIND_CONTACTS);
+		Thread thread = new Thread(this);
+		thread.start();
 	}
 
 	// 添加联系人
@@ -1274,7 +1325,7 @@ public class Client implements Runnable {
 		while (iter.hasNext()) {
 			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
 					.next();
-			System.out.println("  " + entry.getKey() + ") " + entry.getValue());
+			System.out.println("  " + entry.getKey() + "：" + entry.getValue());
 		}
 	}
 
@@ -1453,12 +1504,13 @@ public class Client implements Runnable {
 		System.out.print("正在导入分组信息，请稍后...");
 		Tools.ReadFromFile.readFileByLines(str, Tools.ReadFromFile.KIND_GROUP);
 		refresh();
-		Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
-					.next();
-			System.out.println(entry.getKey() + ": " + entry.getValue());
-		}
+		// Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
+		// while (iter.hasNext()) {
+		// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
+		// .next();
+		// System.out.println(entry.getKey() + ": " + entry.getValue());
+		// }
+		showGroup();
 
 		System.out.println("\n*********************");
 		System.out.println("***** 导 入 成 功 *****");
@@ -1716,13 +1768,16 @@ public class Client implements Runnable {
 		case "8":
 			System.out.println("请输入群组：\n");
 
-			Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
-			while (iter.hasNext()) {
-				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
-						.next();
-				System.out.println("   " + entry.getKey() + ": "
-						+ entry.getValue());
-			}
+			// Iterator<Entry<Integer, String>> iter =
+			// group.entrySet().iterator();
+			// while (iter.hasNext()) {
+			// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>)
+			// iter
+			// .next();
+			// System.out.println("   " + entry.getKey() + ": "
+			// + entry.getValue());
+			// }
+			showGroup();
 			System.out.println();
 			System.out.print(userName + path + "\\修改群组> ");
 			contacts.get(key).setGroup(Integer.parseInt(scan.nextLine()));

@@ -69,7 +69,7 @@ public class People {
 
 	@Override
 	public String toString() {
-		return "------------------------------\n" + "ID:" + this.IDNumber + " "
+		return "------------------------------\n" + "ID:" + this.IDNumber + "\n"
 				+ "\t姓名：" + this.name + "\n" + "\t性别：" + this.gender + "\n"
 				+ "\t生日：" + this.birthday.toString() + "\n" + "\t电话号码 1："
 				+ this.phoneNum1 + "\n" + "\t电话号码 2：" + this.phoneNum2 + "\n"

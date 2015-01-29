@@ -78,96 +78,39 @@ public class Client implements Runnable {
 
 	// 得到各类hashmap信息
 	private void getHashMap() {
-		String str;
+		// 通过一个对每个ID的循环来得到各个属性对应的hashmap
 		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_NAME);
-			if (NameMap.get(str) == null) {
-				LinkList nameList = new LinkList();
-				nameList.addNode(i);
-				NameMap.put(str, nameList);
-			} else {
-				NameMap.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_PINYIN);
-			if (NamePinyinMap.get(str) == null) {
-				LinkList namePinyinList = new LinkList();
-				namePinyinList.addNode(i);
-				NamePinyinMap.put(str, namePinyinList);
-			} else {
-				NamePinyinMap.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_HEADCHAR);
-			if (NameHeadCharMap.get(str) == null) {
-				LinkList nameHeadCharList = new LinkList();
-				nameHeadCharList.addNode(i);
-				NameHeadCharMap.put(str, nameHeadCharList);
-			} else {
-				NameHeadCharMap.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_BIRTH);
-			if (BirthMap.get(str) == null) {
-				LinkList birthList = new LinkList();
-				birthList.addNode(i);
-				BirthMap.put(str, birthList);
-			} else {
-				BirthMap.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_PHONENUM1);
-			if (Phone1Map.get(str) == null) {
-				LinkList phone1List = new LinkList();
-				phone1List.addNode(i);
-				Phone1Map.put(str, phone1List);
-			} else {
-				Phone1Map.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_PHONENUM2);
-			if (Phone2Map.get(str) == null) {
-				LinkList phone2List = new LinkList();
-				phone2List.addNode(i);
-				Phone2Map.put(str, phone2List);
-			} else {
-				Phone2Map.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_QQNUM);
-			if (QQNumMap.get(str) == null) {
-				LinkList QQNumList = new LinkList();
-				QQNumList.addNode(i);
-				QQNumMap.put(str, QQNumList);
-			} else {
-				QQNumMap.get(str).addNode(i);
-			}
-		}
-
-		for (int i = 1; i <= contacts.size(); i++) {
-			str = getItem(i, KIND_LOCATION);
-			if (LocationMap.get(str) == null) {
-				LinkList locationList = new LinkList();
-				locationList.addNode(i);
-				LocationMap.put(str, locationList);
-			} else {
-				LocationMap.get(str).addNode(i);
-			}
-		}
+			String name = getItem(i, KIND_NAME);
+			String namePinyin = getItem(i, KIND_PINYIN);
+			String nameHeadChar = getItem(i, KIND_HEADCHAR);
+			String birth = getItem(i, KIND_BIRTH);
+			String phoneNum1 = getItem(i, KIND_PHONENUM1);
+			String phoneNum2 = getItem(i, KIND_PHONENUM2);
+			String QQNum = getItem(i, KIND_QQNUM);
+			String location = getItem(i, KIND_LOCATION);
+			
+			addDataToHashMap(NameMap, name, i);
+			addDataToHashMap(NamePinyinMap, namePinyin, i);
+			addDataToHashMap(NameHeadCharMap, nameHeadChar, i);
+			addDataToHashMap(BirthMap, birth, i);
+			addDataToHashMap(Phone1Map, phoneNum1, i);
+			addDataToHashMap(Phone2Map, phoneNum2, i);
+			addDataToHashMap(QQNumMap, QQNum, i);
+			addDataToHashMap(LocationMap, location, i);
+		}	
 	}
 
+	// 将元素添加到hashmap中去
+	private void addDataToHashMap(HashMap<String, LinkList> hashmap, String str, int data) {
+		if (hashmap.get(str) == null) {
+			LinkList linkList = new LinkList();
+			linkList.addNode(data);
+			hashmap.put(str, linkList);
+		} else {
+			hashmap.get(str).addNode(data);
+		}
+	}
+	
 	// 初始化hashmap
 	private void initHashMap() {
 		NameMap = new HashMap<String, LinkList>();
@@ -580,7 +523,7 @@ public class Client implements Runnable {
 			refresh();
 			System.out.println("    修改联系人信息");
 			System.out.println("--------------------\n");
-			System.out.println("查询结果：");
+			System.out.println("查询结果：\n");
 			for (int i = 0; i < resultNumber; i++) {
 				System.out.println("   " + (i + 1) + "."
 						+ ((People) contacts.get(IDary[i])).getName() + " "
@@ -648,7 +591,7 @@ public class Client implements Runnable {
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		System.out.println("查找结果：");
+		System.out.println("查找结果：\n");
 
 		LocationMap.get(searchSecondContent).print();
 		LocationMap.get(searchSecondContent).toArray(IDary);
@@ -678,7 +621,7 @@ public class Client implements Runnable {
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		System.out.println("查找结果：");
+		System.out.println("查找结果：\n");
 
 		QQNumMap.get(searchSecondContent).print();
 		QQNumMap.get(searchSecondContent).toArray(IDary);
@@ -708,7 +651,7 @@ public class Client implements Runnable {
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		System.out.println("查找结果：");
+		System.out.println("查找结果：\n");
 
 		Phone1Map.get(searchSecondContent).print();
 		Phone1Map.get(searchSecondContent).toArray(IDary);
@@ -738,7 +681,7 @@ public class Client implements Runnable {
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		System.out.println("查找结果：");
+		System.out.println("查找结果：\n");
 
 		NamePinyinMap.get(searchSecondContent).print();
 		NamePinyinMap.get(searchSecondContent).toArray(IDary);
@@ -768,7 +711,7 @@ public class Client implements Runnable {
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		System.out.println("查找结果：");
+		System.out.println("查找结果：\n");
 
 		NameMap.get(searchSecondContent).print();
 		NameMap.get(searchSecondContent).toArray(IDary);
@@ -874,9 +817,8 @@ public class Client implements Runnable {
 
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
-		System.out.println("查找结果：");
-		System.out.println();
-		System.out.println("   " + (i + 1) + "." + temp.getName() + " "
+		System.out.println("查找结果：\n");
+		System.out.println((i + 1) + "." + temp.getName() + " "
 				+ temp.getGender() + " " + temp.getPhoneNum1() + " "
 				+ temp.getGroupName());
 		IDary[i++] = Integer.parseInt(searchSecondContent);

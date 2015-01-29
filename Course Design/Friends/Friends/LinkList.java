@@ -34,7 +34,7 @@ public class LinkList {
 		People tempPeople;
 		while (temp != head) {
 			tempPeople = Client.contacts.get(temp.getData());
-			System.out.println("   " + (++i) + "."
+			System.out.println((++i) + "."
 					+ tempPeople.getName() + " "
 					+ tempPeople.getGender() + " "
 					+ tempPeople.getPhoneNum1() + " "

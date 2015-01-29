@@ -26,10 +26,6 @@ public class Client implements Runnable {
 	public HashMap<String, LinkList> QQNumMap = null;
 	public HashMap<String, LinkList> LocationMap = null;
 	public HashMap<String, LinkList> GenderMap = null;
-	
-	// 用来存放通过关键词查找到的结果的hashmap
-	public HashMap<Integer, Integer> searchByKeyMap = null;
-	
 
 	// 类型
 	public final String KIND_NAME = "Name";
@@ -92,7 +88,7 @@ public class Client implements Runnable {
 			String phoneNum2 = getItem(i, KIND_PHONENUM2);
 			String QQNum = getItem(i, KIND_QQNUM);
 			String location = getItem(i, KIND_LOCATION);
-			
+
 			addDataToHashMap(NameMap, name, i);
 			addDataToHashMap(NamePinyinMap, namePinyin, i);
 			addDataToHashMap(NameHeadCharMap, nameHeadChar, i);
@@ -101,11 +97,12 @@ public class Client implements Runnable {
 			addDataToHashMap(Phone2Map, phoneNum2, i);
 			addDataToHashMap(QQNumMap, QQNum, i);
 			addDataToHashMap(LocationMap, location, i);
-		}	
+		}
 	}
 
 	// 将元素添加到hashmap中去
-	private void addDataToHashMap(HashMap<String, LinkList> hashmap, String str, int data) {
+	private void addDataToHashMap(HashMap<String, LinkList> hashmap,
+			String str, int data) {
 		if (hashmap.get(str) == null) {
 			LinkList linkList = new LinkList();
 			linkList.addNode(data);
@@ -114,7 +111,7 @@ public class Client implements Runnable {
 			hashmap.get(str).addNode(data);
 		}
 	}
-	
+
 	// 初始化hashmap
 	private void initHashMap() {
 		NameMap = new HashMap<String, LinkList>();
@@ -437,7 +434,7 @@ public class Client implements Runnable {
 			resultNumber = searchConByPinyin(scan, IDary, times);
 			break;
 
-		// 根据手机号码查找 目前只设计了根据一个手机号 还需修改
+		// 根据手机号码查找
 		case "5":
 			resultNumber = searchConByPhone(scan, IDary, times);
 			break;
@@ -454,7 +451,7 @@ public class Client implements Runnable {
 
 		// 根据关键词查找
 		case "9":
-			resultNumber = searchConByKey(scan, IDary, times);
+			resultNumber = searchConByKeys(scan, IDary, times);
 			break;
 		default:
 			return;
@@ -568,51 +565,112 @@ public class Client implements Runnable {
 	}
 
 	// 通过关键词查找
-	private int searchConByKey(Scanner scan, int[] IDary, int times) {
+	private int searchConByKeys(Scanner scan, int[] IDary, int times) {
 		if (times == 1) {
-			
-			if (searchByKeyMap == null) {
-				searchByKeyMap = new HashMap<LinkList, Integer>();
-			} else {
-				searchByKeyMap.clear();
-			}
-			
 			refresh();
 			System.out.println("      查找联系人");
 			System.out.println("--------------------\n");
-			System.out.println("请输入关键词[群组|姓名|性别|生日|电话号码|QQ号码|所在地]\n(每个关键词之间用空格隔开)\n");
-			System.out.println("   0.取消查找\n");
+			System.out
+					.println("请输入关键词[分组(G)|姓名(N)|性别(S)|生日(B)|电话号码(P)|QQ号码(Q)|所在地(L)]\n\n格式为[代号：内容](每个关键词之间用空格隔开)");
+			System.out.println("例如：S:男 B:1995-3-6 L:武汉\n");
+			System.out.println("以下是分组信息(填编号)：\n");
+			Iterator<Entry<Integer, String>> iter2 = group.entrySet()
+					.iterator();
+			while (iter2.hasNext()) {
+				Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
+						.next();
+				System.out.println("   " + entry.getKey() + ": "
+						+ entry.getValue());
+			}
+
+			System.out.println("\n   0.取消查找\n");
 			System.out.print(userName + "@主菜单\\查找联系人\\关键词查找> ");
 			searchSecondContent = scan.nextLine();
 			if (searchSecondContent.equals("0")) {
 				return -1;
 			}
 		}
-		
+
 		String keys[] = searchSecondContent.split(" ");
-		
+
+		String group = null;
+		String name = null;
+		String gender = null;
+		String birth = null;
+		String phone = null;
+		String qq = null;
+		String location = null;
+
 		for (int i = 0; i < keys.length; i++) {
-			if (isNum(keys[i])) { // 如果字符串是数字，那么一定是手机号码或者QQ号码
-				// 鉴于目前手机号码都是11位数字 而 QQ号码是8到10位
-				if (keys[i].length() >= 11) { // 应该是手机号码
-					if (Phone1Map.get(keys[i]) != null) { // 如果在手机号码1中找到了这个号码，则将其加入结果hashmap
-						Phone1Map.get(keys[1]).putHashMap(searchByKeyMap);
-					} else if (Phone2Map.get(keys[i]) != null) { // 如果在手机号码2中找到了这个号码，则将其也加入结果hashmap
-						searchByKeyMap.put(Phone2Map.get(keys[i]), 1);
-					}
-				} else { // 否则是QQ号码
-					if (QQNumMap.get(keys[i]) != null) {
-						searchByKeyMap.put(QQNumMap.get(keys[i]), 1);
-					}
-				} 
-			} else if (keys[i].split("-").length == 3) { // 如果用'-'分隔开的长度为3的话，那么一定是一个生日
-				if (BirthMap.get(keys[i]) != null) {
-					
-				}
+			String[] args = keys[i].split(":");
+			switch (args[0]) {
+			case "G":
+				group = args[1];
+				break;
+			case "N":
+				name = args[1];
+				break;
+			case "S":
+				gender = args[1];
+				break;
+			case "B":
+				birth = args[1];
+				break;
+			case "P":
+				phone = args[1];
+				break;
+			case "Q":
+				qq = args[1];
+				break;
+			case "L":
+				location = args[1];
+				break;
+			default:
+				break;
 			}
 		}
-		
-		return 0;
+
+		int num = 0;
+
+		refresh();
+		System.out.println("      查找联系人");
+		System.out.println("--------------------\n");
+		System.out.println("查找结果：\n");
+
+		for (int i = 1; i <= contacts.size(); i++) {
+			boolean judge = true;
+			if (group != null && !group.equals(getItem(i, KIND_GROUP))) {
+				judge = false;
+			}
+			if (name != null && !name.equals(getItem(i, KIND_NAME))) {
+				judge = false;
+			}
+			if (gender != null && !gender.equals(getItem(i, KIND_GENDER))) {
+				judge = false;
+			}
+			if (birth != null && !birth.equals(getItem(i, KIND_BIRTH))) {
+				judge = false;
+			}
+			if (phone != null && !phone.equals(getItem(i, KIND_PHONENUM1))
+					&& !phone.equals(getItem(i, KIND_PHONENUM2))) {
+				judge = false;
+			}
+			if (qq != null && !qq.equals(getItem(i, KIND_QQNUM))) {
+				judge = false;
+			}
+			if (location != null && !location.equals(getItem(i, KIND_LOCATION))) {
+				judge = false;
+			}
+			if (judge) {
+				System.out.println(getItem(i, KIND_ID) + "."
+						+ getItem(i, KIND_NAME) + " " + getItem(i, KIND_GENDER)
+						+ " " + getItem(i, KIND_PHONENUM1) + " "
+						+ getItem(i, KIND_GROUPNAME));
+				IDary[num++] = i;
+			}
+		}
+
+		return num;
 	}
 
 	// 通过地理位置查找
@@ -691,7 +749,8 @@ public class Client implements Runnable {
 		}
 		refresh();
 
-		if (Phone1Map.get(searchSecondContent) == null) {
+		if (Phone1Map.get(searchSecondContent) == null
+				&& Phone2Map.get(searchSecondContent) == null) {
 			return 0;
 		}
 
@@ -699,10 +758,24 @@ public class Client implements Runnable {
 		System.out.println("--------------------\n");
 		System.out.println("查找结果：\n");
 
-		Phone1Map.get(searchSecondContent).print();
-		Phone1Map.get(searchSecondContent).toArray(IDary);
+		// Phone1Map.get(searchSecondContent).print();
+		// Phone1Map.get(searchSecondContent).toArray(IDary);
+		// return Phone1Map.get(searchSecondContent).getLength();
 
-		return Phone1Map.get(searchSecondContent).getLength();
+		int num = 0;
+
+		for (int i = 1; i < contacts.size(); i++) {
+			if (getItem(i, KIND_PHONENUM1).equals(searchSecondContent)
+					|| getItem(i, KIND_PHONENUM2).equals(searchSecondContent)) {
+				System.out.println(getItem(i, KIND_ID) + "."
+						+ getItem(i, KIND_NAME) + " " + getItem(i, KIND_GENDER)
+						+ " " + getItem(i, KIND_PHONENUM1) + " "
+						+ getItem(i, KIND_GROUPNAME));
+				IDary[num++] = i;
+			}
+		}
+
+		return num;
 	}
 
 	// 通过拼音查找
@@ -856,7 +929,7 @@ public class Client implements Runnable {
 				return -1;
 			}
 		}
-		
+
 		refresh();
 
 		People temp = contacts.get(Integer.parseInt(searchSecondContent));

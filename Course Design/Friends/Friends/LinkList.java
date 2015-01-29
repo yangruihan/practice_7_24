@@ -21,15 +21,6 @@ public class LinkList {
 		length++;
 	}
 
-	// 把LinkList的每一个元素都放到hashmap中
-	public void putHashMap(HashMap<Integer, Integer> hashmap) {
-		LNode temp = head.getNextNode();
-		while (temp != head) {
-			hashmap.put(temp.getData(), 1);
-			temp = temp.getNextNode();
-		}
-	}
-
 	public void delTailNode() {
 		if (length == 0) {
 			System.out.println("当前没有结点");

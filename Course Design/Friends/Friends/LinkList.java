@@ -1,5 +1,7 @@
 package Friends;
 
+import java.util.HashMap;
+
 public class LinkList {
 
 	private int length;
@@ -19,6 +21,15 @@ public class LinkList {
 		length++;
 	}
 
+	// 把LinkList的每一个元素都放到hashmap中
+	public void putHashMap(HashMap<Integer, Integer> hashmap) {
+		LNode temp = head.getNextNode();
+		while (temp != head) {
+			hashmap.put(temp.getData(), 1);
+			temp = temp.getNextNode();
+		}
+	}
+
 	public void delTailNode() {
 		if (length == 0) {
 			System.out.println("当前没有结点");
@@ -34,15 +45,13 @@ public class LinkList {
 		People tempPeople;
 		while (temp != head) {
 			tempPeople = Client.contacts.get(temp.getData());
-			System.out.println((++i) + "."
-					+ tempPeople.getName() + " "
-					+ tempPeople.getGender() + " "
-					+ tempPeople.getPhoneNum1() + " "
-					+ tempPeople.getGroupName());
+			System.out.println((++i) + "." + tempPeople.getName() + " "
+					+ tempPeople.getGender() + " " + tempPeople.getPhoneNum1()
+					+ " " + tempPeople.getGroupName());
 			temp = temp.getNextNode();
 		}
 	}
-	
+
 	public void toArray(int[] a) {
 		int i = 0;
 		LNode temp = head.getNextNode();

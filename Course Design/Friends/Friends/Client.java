@@ -26,6 +26,10 @@ public class Client implements Runnable {
 	public HashMap<String, LinkList> QQNumMap = null;
 	public HashMap<String, LinkList> LocationMap = null;
 	public HashMap<String, LinkList> GenderMap = null;
+	
+	// 用来存放通过关键词查找到的结果的hashmap
+	public HashMap<Integer, Integer> searchByKeyMap = null;
+	
 
 	// 类型
 	public final String KIND_NAME = "Name";
@@ -471,7 +475,7 @@ public class Client implements Runnable {
 			} else {
 				return;
 			}
-		} else if (resultNumber == -1) {
+		} else if (resultNumber == -1) { // 取消搜索标记
 			return;
 		} else if (resultNumber != 0) {
 			System.out.println("\n共 " + resultNumber + " 个结果");
@@ -565,7 +569,49 @@ public class Client implements Runnable {
 
 	// 通过关键词查找
 	private int searchConByKey(Scanner scan, int[] IDary, int times) {
-
+		if (times == 1) {
+			
+			if (searchByKeyMap == null) {
+				searchByKeyMap = new HashMap<LinkList, Integer>();
+			} else {
+				searchByKeyMap.clear();
+			}
+			
+			refresh();
+			System.out.println("      查找联系人");
+			System.out.println("--------------------\n");
+			System.out.println("请输入关键词[群组|姓名|性别|生日|电话号码|QQ号码|所在地]\n(每个关键词之间用空格隔开)\n");
+			System.out.println("   0.取消查找\n");
+			System.out.print(userName + "@主菜单\\查找联系人\\关键词查找> ");
+			searchSecondContent = scan.nextLine();
+			if (searchSecondContent.equals("0")) {
+				return -1;
+			}
+		}
+		
+		String keys[] = searchSecondContent.split(" ");
+		
+		for (int i = 0; i < keys.length; i++) {
+			if (isNum(keys[i])) { // 如果字符串是数字，那么一定是手机号码或者QQ号码
+				// 鉴于目前手机号码都是11位数字 而 QQ号码是8到10位
+				if (keys[i].length() >= 11) { // 应该是手机号码
+					if (Phone1Map.get(keys[i]) != null) { // 如果在手机号码1中找到了这个号码，则将其加入结果hashmap
+						Phone1Map.get(keys[1]).putHashMap(searchByKeyMap);
+					} else if (Phone2Map.get(keys[i]) != null) { // 如果在手机号码2中找到了这个号码，则将其也加入结果hashmap
+						searchByKeyMap.put(Phone2Map.get(keys[i]), 1);
+					}
+				} else { // 否则是QQ号码
+					if (QQNumMap.get(keys[i]) != null) {
+						searchByKeyMap.put(QQNumMap.get(keys[i]), 1);
+					}
+				} 
+			} else if (keys[i].split("-").length == 3) { // 如果用'-'分隔开的长度为3的话，那么一定是一个生日
+				if (BirthMap.get(keys[i]) != null) {
+					
+				}
+			}
+		}
+		
 		return 0;
 	}
 

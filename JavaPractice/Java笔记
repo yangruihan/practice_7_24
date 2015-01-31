@@ -1,0 +1,65 @@
+Java 复习笔记：
+
+Java SE 第一讲：
+
+**Java 基础
+
+	Java SE: Java Standard Edition
+	Java ME: Java Micro Edition
+	Java EE: Java Enterprise Edition
+
+	原名字：J2SE、J2ME、J2EE
+
+	JDK: Java Development Kit
+	JRE: Java Runtime Enviroment
+	（JDK 包含了 JRE）
+
+	JDK1.4, JDK1.5(5.0), JDK1.6(6.0), JDK7.0...
+	
+	所有的Java代码，其后缀都是以.java 结尾
+
+	Java 时跨平台的语言，真正执行的不是二进制代码，而是字节码
+
+	JVM（Java Virtual Machine，Java虚拟机）
+
+	Java 是跨平台的，而JVM不是跨平台的（JVM是由C语言编写的）
+
+	Java之所以能够做到跨平台，本质原因在于JVM不是跨平台的。
+
+
+Java SE 第二讲：
+
+**原生数据类型
+	
+	1)原生数据类型（Primitive Data Type）
+	2)引用类型（对象类型）（Reference Type）
+
+	变量名：在Java中，变量名以下划线（_）、字母、$符号开头，并且后跟下划线、字母、$符号以及数字。总之，Java中的变量名不能以数字开头。
+
+	Java 中原生数据类型一共有8种：
+		1)整型：int
+		2)字节型：byte，表示-128~127之间的整数
+		3)短整型：short，（16位）
+		4)长整形：long，（64位）
+
+	关于计算机系统中的数据表示：
+		位：bit（只有0,1两种状态），是计算机系统中的最小数据表示单位。
+		字节：byte，1 byte = 8 bit
+		千字节：KB，1 KB = 1024 byte
+		兆字节：MB，1 MB = 1024 KB
+		......
+
+	*提示：注释不能嵌套，计算机只能识别一个注释开头和一个注释结尾
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,5 @@
 Java 复习笔记：
 
-Java SE 第一讲：
 
 **Java 基础
 
@@ -27,8 +26,6 @@ Java SE 第一讲：
 	Java之所以能够做到跨平台，本质原因在于JVM不是跨平台的。
 
 
-Java SE 第二讲：
-
 **原生数据类型
 	
 	1)原生数据类型（Primitive Data Type）
@@ -41,6 +38,10 @@ Java SE 第二讲：
 		2)字节型：byte，表示-128~127之间的整数
 		3)短整型：short，（16位）
 		4)长整形：long，（64位）
+		5)单精度浮点型：float
+		6)双精度浮点型：double
+		7)字符型：char，character
+		8)布尔类型：boolean，true or false
 
 	关于计算机系统中的数据表示：
 		位：bit（只有0,1两种状态），是计算机系统中的最小数据表示单位。
@@ -50,6 +51,83 @@ Java SE 第二讲：
 		......
 
 	*提示：注释不能嵌套，计算机只能识别一个注释开头和一个注释结尾
+
+
+**原生数据类型使用陷阱
+
+	Java 中的所有浮点类型默认情况下都是double，不能将double类型的值赋值给float类型的变量。
+	故 float a = 1.2; // 编译错误
+	两种方法解决：
+		1）强制类型转换：float a = (float)1.2;
+		2）内置支持：float a = 1.2F; // 小写f也可以
+
+	变量在使用前必须赋值，且必须指定一个类型。变量只能定义一次。
+
+	大范围 → 小范围，报错
+	小范围 → 大范围，可以（→ 是赋值的意思）
+
+
+**运算符(Operator)
+
+	+ - * / %
+	
+	当有若干个不同类型的变量参与运算时，结果取决于其中类型范围最大的变量类型
+
+	int a = 1;
+	int b = 2;
+	double c = (double)a / b;
+	上面代码中 a 和 b 都是 int 类型，但是通过 (double)a 将 a 转换成一个匿名的变量，该变量的类型是double，但要注意，a 本身依旧是 int ，而不是 double。
+
+
+Java SE 第五讲：
+
+**运算符续
+
+	关系运算符：>  <  ==  !=  >=  <=  
+	逻辑运算符：&& ||
+
+	关于逻辑运算符的短路特征：
+		1）逻辑与：如果第一个操作数为false，那么逻辑与后面的运算是不会执行的
+		2）逻辑或：如果第一个操作数位true，那么逻辑或后面的运算是不会执行的
+
+
+**流程控制语句(Flow Control Statement)
+
+	1.条件运算符（三目运算）
+		type d = a ? b : c;
+	2.if 语句
+	if() {
+		...
+	} else if () {
+		...
+	} else {
+		...
+	}
+	3.switch 语句(byte, short, int, char)
+	switch(v) {
+	case value1:
+		break;
+	case value2:
+		break;
+	default:
+		break;
+	}
+	
+
+**流程控制语句续
+
+	1.while 语句
+	while(布尔表达式) {
+		...
+	}
+	2.do ... while 语句
+	do {
+		...
+	} while(布尔表达式)
+	3.for 语句
+	for (初始化; 条件; 变化) {
+		...
+	}
 
 
 

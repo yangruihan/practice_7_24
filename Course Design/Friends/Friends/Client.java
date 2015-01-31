@@ -265,13 +265,6 @@ public class Client implements Runnable {
 
 		System.out.println("请选择分组");
 
-		// Iterator<Entry<Integer, String>> iter2 = group.entrySet().iterator();
-		// while (iter2.hasNext()) {
-		// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter2
-		// .next();
-		// System.out
-		// .println("   " + entry.getKey() + ": " + entry.getValue());
-		// }
 		showGroup();
 
 		System.out.print("分组> ");
@@ -574,15 +567,7 @@ public class Client implements Runnable {
 					.println("请输入关键词[分组(G)|姓名(N)|性别(S)|生日(B)|电话号码(P)|QQ号码(Q)|所在地(L)]\n\n格式为[代号：内容](每个关键词之间用空格隔开)");
 			System.out.println("例如：S:男 B:1995-3-6 L:武汉\n");
 			System.out.println("以下是分组信息(填编号)：\n");
-			// Iterator<Entry<Integer, String>> iter2 = group.entrySet()
-			// .iterator();
-			// while (iter2.hasNext()) {
-			// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>)
-			// iter2
-			// .next();
-			// System.out.println("   " + entry.getKey() + ": "
-			// + entry.getValue());
-			// }
+
 			showGroup();
 
 			System.out.println("\n   0.取消查找\n");
@@ -735,7 +720,7 @@ public class Client implements Runnable {
 		return QQNumMap.get(searchSecondContent).getLength();
 	}
 
-	// 通过手机号查找 暂时通过手机号码1
+	// 通过手机号查找
 	private int searchConByPhone(Scanner scan, int[] IDary, int times) {
 		if (times == 1) {
 			refresh();
@@ -759,10 +744,6 @@ public class Client implements Runnable {
 		System.out.println("      查找联系人");
 		System.out.println("--------------------\n");
 		System.out.println("查找结果：\n");
-
-		// Phone1Map.get(searchSecondContent).print();
-		// Phone1Map.get(searchSecondContent).toArray(IDary);
-		// return Phone1Map.get(searchSecondContent).getLength();
 
 		int num = 0;
 
@@ -848,15 +829,6 @@ public class Client implements Runnable {
 			System.out.println("--------------------\n");
 			System.out.println("请选择分组");
 
-			// Iterator<Entry<Integer, String>> iter2 = group.entrySet()
-			// .iterator();
-			// while (iter2.hasNext()) {
-			// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>)
-			// iter2
-			// .next();
-			// System.out.println("   " + entry.getKey() + ": "
-			// + entry.getValue());
-			// }
 			showGroup();
 
 			System.out.println();
@@ -981,8 +953,10 @@ public class Client implements Runnable {
 		System.out.println("   1.显示详细信息");
 		System.out.println("   2.添加联系人");
 		System.out.println("   3.删除联系人");
-		System.out.println("   4.添加分组");
-		System.out.println("   5.删除分组");
+		System.out.println("   4.修改联系人信息");
+		System.out.println("   5.添加分组");
+		System.out.println("   6.删除分组");
+		System.out.println("   7.修改分组信息");
 		System.out.println("   0.返回主菜单\n");
 		System.out.print(userName + "@主菜单\\显示联系人> ");
 		String key = scan.nextLine();
@@ -999,10 +973,71 @@ public class Client implements Runnable {
 			addContact(scan);
 		} else if (key.equals("3")) {
 			delContact(scan);
-		} else if (key.equals("4")) {
-			addGroup(scan);
 		} else if (key.equals("5")) {
+			addGroup(scan);
+		} else if (key.equals("6")) {
 			delGroup(scan);
+		} else if (key.equals("4")) {
+			
+			refresh();
+			System.out.println("      修改联系人");
+			System.out.println("--------------------\n");
+
+			showConByGroupR();
+
+			System.out.println("\n请输入需要修改的联系人编号\n");
+			System.out.print(userName + "@主菜单\\显示联系人\\修改联系人信息> ");
+			String changeID = scan.nextLine();
+			while (!isNum(changeID)) {
+				refresh();
+				System.out.println("      修改联系人");
+				System.out.println("--------------------\n");
+				System.out.println("请输入正确的联系人编号\n");
+				System.out.print(userName + "@主菜单\\显示联系人\\修改联系人信息> ");
+				changeID = scan.nextLine();
+			}
+			changeContactInfo(scan, Integer.parseInt(changeID), userName
+					+ "@主菜单\\显示联系人\\修改联系人信息");
+			String again = scan.nextLine();
+			while (again.equals("1")) {
+				changeContactInfo(scan, Integer.parseInt(changeID), userName
+						+ "@主菜单\\显示联系人\\修改联系人信息");
+				again = scan.nextLine();
+			}
+			if (again.equals("0")) {
+				optShowCon(scan);
+			}
+
+		} else if (key.equals("7")) {
+			refresh();
+			System.out.println("        修改分组");
+			System.out.println("--------------------\n");
+			
+			showGroup();
+			
+			System.out.println("\n请输入需要修改的分组编号\n");
+			System.out.print(userName + "@主菜单\\显示联系人\\修改分组信息> ");
+			String changeGroupID = scan.nextLine();
+			while (!isNum(changeGroupID)) {
+				refresh();
+				System.out.println("        修改分组");
+				System.out.println("--------------------\n");
+				System.out.println("请输入正确的分组编号\n");
+				System.out.print(userName + "@主菜单\\显示联系人\\修改分组信息> ");
+				changeGroupID = scan.nextLine();
+			}
+			refresh();
+			System.out.println("      修改联系人");
+			System.out.println("--------------------\n");
+			System.out.println("\n请输入新的分组名\n");
+			System.out.print(userName + "@主菜单\\显示联系人\\修改分组信息> ");
+			String groupNewName = scan.nextLine();
+			if (group.get(Integer.parseInt(groupNewName))!= null) {
+				group.put(Integer.parseInt(changeGroupID), groupNewName);
+			}
+			
+//			Thread thread = new Thread(this);
+//			thread.start();
 		} else {
 
 		}
@@ -1504,12 +1539,7 @@ public class Client implements Runnable {
 		System.out.print("正在导入分组信息，请稍后...");
 		Tools.ReadFromFile.readFileByLines(str, Tools.ReadFromFile.KIND_GROUP);
 		refresh();
-		// Iterator<Entry<Integer, String>> iter = group.entrySet().iterator();
-		// while (iter.hasNext()) {
-		// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>) iter
-		// .next();
-		// System.out.println(entry.getKey() + ": " + entry.getValue());
-		// }
+
 		showGroup();
 
 		System.out.println("\n*********************");
@@ -1768,15 +1798,6 @@ public class Client implements Runnable {
 		case "8":
 			System.out.println("请输入群组：\n");
 
-			// Iterator<Entry<Integer, String>> iter =
-			// group.entrySet().iterator();
-			// while (iter.hasNext()) {
-			// Map.Entry<Integer, String> entry = (Map.Entry<Integer, String>)
-			// iter
-			// .next();
-			// System.out.println("   " + entry.getKey() + ": "
-			// + entry.getValue());
-			// }
 			showGroup();
 			System.out.println();
 			System.out.print(userName + path + "\\修改群组> ");
@@ -1794,7 +1815,7 @@ public class Client implements Runnable {
 			System.out.println("选项：");
 			System.out.println("   1.继续修改");
 			System.out.println("   0.返回查询结果\n");
-			System.out.print(userName + "@主菜单\\修改联系人信息> ");
+			System.out.print(userName + path + "> ");
 			return;
 		}
 
@@ -1805,8 +1826,8 @@ public class Client implements Runnable {
 		System.out.println(contacts.get(key).toString());
 		System.out.println("选项：");
 		System.out.println("   1.继续修改");
-		System.out.println("   0.返回查询结果\n");
-		System.out.print(userName + "@主菜单\\修改联系人信息> ");
+		System.out.println("   0.返回上一级\n");
+		System.out.print(userName + path + "> ");
 
 		// 修改对应的hashmap
 		Thread thread = new Thread(this);

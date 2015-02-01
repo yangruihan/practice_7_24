@@ -24,7 +24,6 @@ public class People {
 	private String location; // 所在地
 	private String gender; // 性别
 	private int group; // 群组
-	private String groupName; // 群组名
 
 	public People(int group, String name, String gender, Date birthday,
 			String phone_num1, String phone_num2, String QQNum, String location) {
@@ -40,7 +39,6 @@ public class People {
 		this.location = location;
 		this.namePinyin = calNamePinyin();
 		this.nameHeadChar = getNameHeadChar();
-		this.groupName = Client.group.get(group);
 	}
 	
 	public People() {
@@ -74,7 +72,7 @@ public class People {
 				+ "\t生日：" + this.birthday.toString() + "\n" + "\t电话号码 1："
 				+ this.phoneNum1 + "\n" + "\t电话号码 2：" + this.phoneNum2 + "\n"
 				+ "\tQQ号码：" + this.QQNum + "\n" + "\t所在地：" + this.location
-				+ "\n" + "\t关系：" + this.groupName
+				+ "\n" + "\t关系：" + getGroupName()
 				+ "\n------------------------------\n";
 	}
 
@@ -91,11 +89,7 @@ public class People {
 	}
 
 	public String getGroupName() {
-		return groupName;
-	}
-
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+		return Client.group.get(group);
 	}
 
 	public String getGender() {
@@ -176,6 +170,5 @@ public class People {
 
 	public void setGroup(int group) {
 		this.group = group;
-		this.groupName = Client.group.get(group);
 	}
 }

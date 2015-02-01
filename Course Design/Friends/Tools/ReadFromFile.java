@@ -125,9 +125,6 @@ public class ReadFromFile {
 				res = new People(Integer.parseInt(ary[0]), ary[1], ary[2],
 						new Date(0, 0, 0), ary[4], ary[5], ary[6], ary[7]);
 			}
-			if (res != null) {
-				res.setGroupName("订餐");
-			}
 			Client.contacts.put(res.getIDNumber(), res);
 		} // 如果分组不是订餐
 		else {
@@ -150,14 +147,7 @@ public class ReadFromFile {
 				peo = new People(Integer.parseInt(ary[0]), ary[1], ary[2],
 						birth, ary[4], ary[5]);
 			}
-			if (peo != null) {
-				peo.setGroupName(getGroupName(ary[0]));
-			}
 			Client.contacts.put(peo.getIDNumber(), peo);
 		}
-	}
-
-	private static String getGroupName(String group) {
-		return Client.group.get(Integer.parseInt(group));
 	}
 }

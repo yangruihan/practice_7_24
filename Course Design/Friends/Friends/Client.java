@@ -1032,12 +1032,22 @@ public class Client implements Runnable {
 			System.out.println("\n请输入新的分组名\n");
 			System.out.print(userName + "@主菜单\\显示联系人\\修改分组信息> ");
 			String groupNewName = scan.nextLine();
-			if (group.get(Integer.parseInt(groupNewName))!= null) {
+			if (group.get(Integer.parseInt(changeGroupID))!= null) {
 				group.put(Integer.parseInt(changeGroupID), groupNewName);
 			}
 			
-//			Thread thread = new Thread(this);
-//			thread.start();
+			refresh();
+			System.out.println("*********************");
+			System.out.println("***** 修 改 成 功 *****");
+			System.out.println("*********************\n");
+			System.out.println("       当前分组");
+			System.out.println("--------------------\n");
+			showGroup();
+			System.out.println("\n选项：");
+			System.out.println("   0.返回主菜单\n");
+			System.out.print(userName + "@主菜单\\显示联系人\\修改分组信息> ");
+			scan.nextLine();
+			
 		} else {
 
 		}
@@ -1173,7 +1183,7 @@ public class Client implements Runnable {
 				System.out.println("\n选项：");
 				System.out.println("   0.返回主菜单\n");
 				System.out.print(userName + "@主菜单\\显示联系人\\添加分组\\移动联系人> ");
-				String str2 = scan.nextLine();
+				scan.nextLine();
 
 			} else {
 
@@ -1844,13 +1854,13 @@ public class Client implements Runnable {
 		}
 	}
 
-	// 判断一个文件是否为空
-	private boolean fileIsEmpty(String filename) {
-		File file = new File(filename);
-		if (file.length() == 0)
-			return true;
-		return false;
-	}
+//	// 判断一个文件是否为空
+//	private boolean fileIsEmpty(String filename) {
+//		File file = new File(filename);
+//		if (file.length() == 0)
+//			return true;
+//		return false;
+//	}
 
 	// 刷新控制台
 	private void refresh() {

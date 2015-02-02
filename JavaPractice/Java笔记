@@ -35,7 +35,7 @@ Java 笔记
 * int/0 = Exception
   double/0 = (NaN or 无穷大)
 
-* Class Math Method:
+* Class Math Methods:
 	Math.pow(x, a) == x^a
 	Math.sin()
 	Math.cos()
@@ -66,7 +66,7 @@ byte → short → int → long
 
 * 运算符优先级
 	[] . ()（方法调用）		从左向右
-	! ~ ++ -- +（一元运算） -（一元运算） () （强制类型转换） new	从右向左
+	! ~ ++ -- +（一元运算） -（一元运算） () （强制类型转换） new	*从右向左
 	* / %					从左向右
 	+ -						从左向右
 	<< >> >>>				从左向右
@@ -74,10 +74,37 @@ byte → short → int → long
 	== !=					从左向右
 	&						从左向右
 	^						从左向右
+	|						从左向右
+	&&						从左向右
+	||						从左向右
+	?:						*从右向左
+	= += -= *= /= %= &= |= ^= <<= >>= >>>=	*从右向左
 
-	
-
-
+* Class String Methods: (P 47)
+	char charAt(int index)
+	int codePointAt(int index)
+	int offsetByCodePoints(int startIndex, int cpCount)
+	int compareTo(String other) //return [-1 | 0 | 1]
+	boolean endsWith(String suffix)
+	boolean equals(Object other)
+	boolean equalsIgnoreCase(String other)
+	int indexOf(String str) // return -1 | first index of the str
+	int indexOf(String str, int fromIndex)
+	int indexOf(int cp)
+	int indexOf(int cp, int fromIndex)
+	int lastIndexOf(String str) // return -1 | last index of the str
+	int lastIndexOf(String str, int fromIndex)
+	int lastIndexOf(int cp)
+	int lastIndexOf(int cp, int fromIndex)
+	int length()	
+	int codePointCount(int startIndex, int endIndex)
+	String replace(CharSequence oldString)
+	boolean startsWith(String prefix)
+	String substring(int beginIndex)
+	String substring(int beginIndex, int endIndex)
+	String toLowerCase()
+	String toUpperCase()
+	String trim() // 返回一个新字符串，这个字符串将删除了原始字符串头部和尾部的空格
 
 
 

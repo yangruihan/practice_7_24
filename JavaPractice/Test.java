@@ -1,10 +1,10 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Test {
 
 	public static void main(String[] args) {
-		double d  = 3333.33;
-		System.out.printf("%,f", d);
+		Date date = new Date(2015, 2, 3);
+		System.out.printf("%te", date);
 	}
 }
 

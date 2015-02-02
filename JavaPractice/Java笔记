@@ -199,8 +199,45 @@ byte → short → int → long
 						例如:%d%<x以十进制和
 						十六进制打印同一个数值
 
+* 日期和时间的转换符(%t + x, 例如%tc, 后面接一个日期类Date) (P 58)
+	c		完整的日期和时间		Mon Feb 09 18:05:19 PST 2004
+	F		ISO 8601日期			2004-02-09
+	D		美国格式的日期			02/09/2004
+			(月/日/年)
+	T		24小时时间				18:05:19
+	r		12小时时间				06:05:19 pm
+	R		24小时时间没有秒		18:05
+	Y		4位数字的年(前面补0)	2004
+	y		年的后两位数字(补0)		04
+	C		年的前两位数字(补0)		20
+	B		月的完整拼写			February
+	b/h		月的缩写				Feb
+	m		两位数字的月(补0)		02
+	d		两位数字的日(补0)		09
+	e		两位数子的日(不补0)		9
+	A		星期几的完整拼写		Monday
+	a		星期几的缩写			Mon
+	j		三位数的年中的日子		069
+	H		两位数的小时(补0)		18
+	k		两位数的小时(不补0)		18
+	... (详见58页)
 
+* java.util.Scanner (P 61)
+	Scanner(File f)
+	Scanner(String data)
 
+* java.io.PrintWriter (P 61)
+	PrintWriter(String fileName)
+	
+* java.nio.file.Paths (P 61)
+	static Path get(String pathname)
 
+* java中不能在嵌套的两个快中声明同名的变量:
+	public static void main(String[] args) {
+		int n;
+		{
+			int n; // ERROR -- can't redefine n in inner block
+ 		}
+	}
 
 

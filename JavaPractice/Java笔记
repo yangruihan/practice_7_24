@@ -35,6 +35,51 @@ Java 笔记
 * int/0 = Exception
   double/0 = (NaN or 无穷大)
 
-		 
+* Class Math Method:
+	Math.pow(x, a) == x^a
+	Math.sin()
+	Math.cos()
+	Math.tan()
+	Math.atan()
+	Math.atan2()
+	Math.exp()
+	Math.log()
+	
+	Math.PI == π
+	Math.E == e
+
+	* 在JDK5.0开始，在源文件顶部加上import static java.lang.Math.*;就可以不用添加前缀Math.
+
+* 数值类型之间的转换
+			   char
+			    ↓
+byte → short → int → long
+                |  ↘  |
+            float → double
+ 
+	* 其中带有箭头的转换是无损精度的转换
+	  | 转换是会损失一定的精度，并且long也可以转换成float，也会损失一定的精度
+
+* double x = 9.997;
+  int a = (int)x; // a == 9
+  int b = (int)Math.round(x); // b == 10, Math.round返回值是long类型，故仍需要强制类型转换
+
+* 运算符优先级
+	[] . ()（方法调用）		从左向右
+	! ~ ++ -- +（一元运算） -（一元运算） () （强制类型转换） new	从右向左
+	* / %					从左向右
+	+ -						从左向右
+	<< >> >>>				从左向右
+	< <= > >= instanceof	从左向右
+	== !=					从左向右
+	&						从左向右
+	^						从左向右
+
+	
+
+
+
+
+
 
 

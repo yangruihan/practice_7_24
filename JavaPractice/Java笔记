@@ -80,7 +80,10 @@ byte → short → int → long
 	?:						*从右向左
 	= += -= *= /= %= &= |= ^= <<= >>= >>>=	*从右向左
 
-* Class String Methods: (P 47)
+
+** 字符串 **
+
+* java.lang.string (P 50)
 	char charAt(int index)
 	int codePointAt(int index)
 	int offsetByCodePoints(int startIndex, int cpCount)
@@ -105,6 +108,97 @@ byte → short → int → long
 	String toLowerCase()
 	String toUpperCase()
 	String trim() // 返回一个新字符串，这个字符串将删除了原始字符串头部和尾部的空格
+
+* 如果需要由较短的字符串构建字符串，则使用StringBuilder类可以节约空间和时间
+例：
+	StringBuilder builder = new StringBuilder();
+	// 每次需要添加一部分内容时，就调用append方法
+	builder.append(ch); // append a single character
+	builder.append(str); // append a string
+	// 在需要构建字符串时就调用toString方法，将得到一个String对象
+	String completedString = builder.toString();
+
+* java.lang.StringBuilder (P 53)
+	StringBuilder()
+	int length()
+	StringBuilder append(String str)
+	StringBuilder append(char c)
+	StringBuilder appendCodePoint(int cp)
+	void setCharAt(int i, char c)
+	StringBuilder insert(int offset, String str) // 在offset的位置插入一个字符串并返回this
+	StringBuilder insert(int offset, char c)
+	StringBuilder delete(int startIndex, int endIndex)
+	String toString()
+	
+
+** 输入输出 **
+
+* Scanner 类
+	Scanner scan = new Scanner(System.in);
+
+	nextLine() | next() 区别：
+		nextLine() 读取一行内容，以换行符作结束标志
+		next() 读取一个单词的内容，以空白符作结束标志
+
+* 因为Scanner类从控制台读取数据是可见的，所以读取密码时不能使用Scanner类，而要使用Console类
+例：
+	Console cons = System.console();
+	String username = cons.readLine("User name: ");
+	char[] passwd = cons.readPassword("Password: ");
+	// 为了安全起见，返回的密码存放在一维字符数组中，而不是字符串中，在对密码进行处理之后，应该马上用一个填充值覆盖数组元素。
+	// Console对象处理输入不如Scanner方便，每次只能读取一行输入，没有读取一个单词或一个数值的方法。
+
+* java.util.Scanner (P 56)
+	Scanner (InputStream in)
+	String nextLine()
+	String next()
+	int nextInt()
+	double nextDouble()
+	boolean hasNext()
+	boolean hasNextInt()
+	boolean hasNextDouble()
+
+* java.lang.System (P 56)
+	static Console console()
+	
+* java.io.Console (P 56)
+	static char[] readPassword(String prompt, Object...args)
+	static String readLine(String prompt, Object...args)
+	// args参数可以用来提供输入格式。
+
+* 用于printf的转换符
+	d			十进制整数				159
+	x			十六进制整数			9f
+	o			八进制整数				237
+	f			定点浮点数				15.9
+	e			指数浮点数				15.9e+01
+	g			通用浮点数				——
+	a			十六进制浮点数			0x1.fccdp3
+	s			字符串					"Hello"
+	c			字符					'h'
+	b			布尔					True
+	h			散列码					42628b2
+	tx			日期时间		
+	%			百分号					%
+	n			与平台有关的行分隔符	--
+
+* 用于printf的标志
+	+					打印正数和负数的符号	+3333.33
+	空格				在正数之前添加空格		| 3333.33|
+	0					在数字前面补0			003333.33
+	-					左对齐					|3333.33 |
+	(					将负数括在括号内		(3333.33)
+	,					添加分组分隔符			3,333.33
+	#(对于f格式)		包含小数点				3,333.
+	#(对于x或0格式)		添加前缀0x或0			0xcafe
+	$					给定被格式化的参数索引	159 9F
+						例如:%1$d, %1$x将以十
+						进制和十六进制打印第一
+						个参数
+	<					格式化前面说明的数值,	159 9F
+						例如:%d%<x以十进制和
+						十六进制打印同一个数值
+
 
 
 

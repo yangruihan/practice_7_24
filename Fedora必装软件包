@@ -29,4 +29,39 @@
 	Fedora20的源：
 	sudo yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm  http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm
 
+3 安装一下有用的一些软件包
+
+sudo yum -y install yum-fastestmirror unrar thunderbird emacs ibus-table \
+		 redhat-lsb gstreamer-plugins-bad gstreamer-plugins-ugly gstreamer-ffmpeg \
+		 compat-libstdc++-33 NetworkManager-devel python-gevent tracker-ui-tools qemu \
+		 libpciaccess-devel xorg-x11-util-macros llvm-devel mtdev* mutt msmtp tftp \
+		 tftp-server policycoreutils-gui mtd-utils mtd-utils-ubi vim ibus-pinyin \
+		 gnome-tweak-tool ckermit stardict stardict-dic-zh_CN stardict-dic-en \
+		 ibus-table-chinese-wubi-haifeng gnash smplayer vlc samba pidgin pidgin-sipe \
+		 meld expect glibc-static ncurses-static genromfs cmake ccache p7zip nmap \
+		 gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-libav 
+
+4 升级一下系统
+
+	sudo yum -y update
+
+5 安装chrome
+
+	32位:wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.rpm
+	sudo rpm -ivh google-chrome-stable_current_i386.rpm
+
+	64位:wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+	sudo rpm -ivh google-chrome-stable_current_x86_64.rpm
+
+6 安装flash plugin
+	
+	32位:wget http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
+	sudo rpm -ivh adobe-release-i386-1.0-1.noarch.rpm
+
+	64位:wget http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
+	sudo rpm -ivh adobe-release-x86_64-1.0-1.noarch.rpm 
+	
+	sudo yum -y install flash-plugin
+
+
 

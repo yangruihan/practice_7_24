@@ -63,5 +63,21 @@ sudo yum -y install yum-fastestmirror unrar thunderbird emacs ibus-table \
 	
 	sudo yum -y install flash-plugin
 
+7 安装音频视频解压器
+	
+wget http://mplayerhq.hu/MPlayer/releases/codecs/all-20110131.tar.bz2
+tar jxf all-20110131.tar.bz
 
+
+	32位系统：
+	
+	sudo mkdir -p /usr/lib/codecs
+	
+	sudo cp all-20110131/*  /usr/lib/codecs
+
+	64位系统：
+
+	sudo mkdir -p /usr/lib64/codecs
+
+	sudo cp all-20110131/*  /usr/lib64/codecs
 

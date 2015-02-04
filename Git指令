@@ -2,7 +2,7 @@ clone来自GitHub的项目
 
 可以用如下方式将GitHub远程版本库中的代码clone到本地：
 git clone git@github.com:alioth310/test.git
-git clone git://github.com/alioth310/test.git
+git clone git://github.com/alioth310/test.git // 有可能会出现问题
 
 其他常用的Git命令
 

@@ -1,0 +1,23 @@
+1.浏览器 firefox + 各种插件（绿色）
+http://www.zhihu.com/question/27299254
+
+Chrome + 各种插件同理
+鉴于谷歌在大陆的各种蛋疼。。。（此处省略N个字）
+
+2.字体美化 MacType（绿色）
+*强烈推荐*效果立竿见影
+
+3.系统清理 CCleaner（收费）
+
+4.碎片整理 Defraggler（收费）
+
+5.文档搜索 Everything （绿色）
+速度极快
+
+6.快速启动 Find and Run Robot（绿色）
+各种方便
+
+7.文本编辑器
+一般用户：Sublime Text 3 （提示购买可以直接无视= =）
+需要效率质的飞越的用户：gVim/Emacs
+

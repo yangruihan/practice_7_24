@@ -73,3 +73,6 @@ echo "<br/>";
     echo "<br/>";
     echo $arr[0]; // 输出数组的第一个元素
     echo "<br/>";
+    list($xingming, $nianling, $zhiye) = functionInfo("张三", 18, "学生");
+    echo $xingming."今年".#nianling.“岁了，他还是一个”.$zhiye;
+

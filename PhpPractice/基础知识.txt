@@ -53,5 +53,23 @@ _METHOD_    当前方法名
     }
 // 调用，这样做大大提高了函数灵活性，functionArea3(10)整体得到一个值在内存中，
 echo functionArea3(20);
-echo "<br/>"
+echo "<br/>";
+带参数，有返回值的函数。尽量将函数封装起来，不要修改函数内部的东西，将需要修改的东西暴露在函数体外面。
 
+    /**
+     *返回多个值得函数调用：可以通过返回一个数组，然后用list()函数构造即可
+     */
+    function functionInfo($name, $age, $job) {
+        // $userInfo是一个数组
+        // $userInfo = array($name, $age, $job);
+        $userInfo[] = $name;
+        $userInfo[] = $age;
+        $userInfo[] = $job;
+        return $userInfo;
+    }
+    // 调用。print_r()是输出数组内容的函数
+    $arr = functionInfo("张三", 18, "学生");
+    print_r($arr);
+    echo "<br/>";
+    echo $arr[0]; // 输出数组的第一个元素
+    echo "<br/>";

@@ -1,0 +1,188 @@
+//sublime text3 自定义快捷键
+
+//=======================我的快捷键=======================//
+
+// 删除当前行
+{ "keys": ["ctrl+d"], "command":"run_macro_file", "args": {"file":"Packages/Default/Delete Line.sublime-macro"} },
+// 复制选中行到行后
+{ "keys": ["ctrl+alt+down"], "command":"duplicate_line" },
+// 选词(按住-继续选择下个相同的字符串)
+{ "keys": ["ctrl+g"], "command":"find_under_expand" },
+// gb一次选中所有的
+{ "keys": ["ctrl+g", "ctrl+b"],"command": "find_all_under" },
+// 自动提示、补全
+{ "keys": ["alt+/"], "command":"auto_complete" },
+{ "keys": ["alt+/"], "command":"replace_completion_with_auto_complete", "context":
+[
+{ "key": "last_command", "operator":"equal", "operand": "insert_best_completion" },
+{ "key": "auto_complete_visible", "operator":"equal", "operand": false },
+{ "key": "setting.tab_completion", "operator":"equal", "operand": true }
+]
+},
+// 与上行互换
+{ "keys": ["alt+up"], "command":"swap_line_up" },
+// 与下行互换
+{ "keys": ["alt+down"], "command":"swap_line_down" },
+{ "keys": ["alt+/","alt+/"], "command":"insert_best_completion" },
+
+//与tab键冲突，秒之
+{ "keys": ["shift+tab"], "command":"insert_best_completion", "args": {"default":"\t", "exact": true} },
+{ "keys": ["shift+tab"], "command":"insert_best_completion", "args": {"default":"\t", "exact": false},
+"context":
+[
+{ "key": "setting.tab_completion", "operator":"equal", "operand": true }
+]
+},
+{ "keys": ["shift+tab"], "command":"replace_completion_with_next_completion", "context":
+[
+{ "key": "last_command", "operator":"equal", "operand": "insert_best_completion" },
+{ "key": "setting.tab_completion", "operator":"equal", "operand": true }
+]
+},
+{ "keys": ["shift+tab"], "command":"reindent", "context":
+[
+{ "key": "setting.auto_indent", "operator":"equal", "operand": true },
+{ "key": "selection_empty", "operator":"equal", "operand": true, "match_all": true },
+{ "key": "preceding_text", "operator":"regex_match", "operand": "^$","match_all": true },
+{ "key": "following_text", "operator":"regex_match", "operand": "^$","match_all": true }
+]
+},
+{ "keys": ["shift+tab"], "command":"indent", "context":
+[
+{ "key": "text", "operator":"regex_contains", "operand": "\n" }
+]
+},
+{ "keys": ["shift+tab"], "command":"next_field", "context":
+[
+{ "key": "has_next_field", "operator":"equal", "operand": true }
+]
+},
+{ "keys": ["shift+tab"], "command":"commit_completion", "context":
+[
+{ "key": "auto_complete_visible" },
+{ "key": "setting.auto_complete_commit_on_tab" }
+]
+},
+
+//移动光标
+{ "keys": ["alt+l"], "command": "move","args": {"by": "characters", "forward":false} },
+{ "keys": ["alt+r"], "command": "move","args": {"by": "characters", "forward":true} },
+{ "keys": ["alt+u"], "command": "move","args": {"by": "lines", "forward":false} },
+{ "keys": ["alt+d"], "command": "move","args": {"by": "lines", "forward":true} },
+{ "keys": ["shift+alt+l" ], "command":"move", "args": {"by": "characters","forward": false, "extend": true} },
+{ "keys": ["shift+alt+r"], "command":"move", "args": {"by": "characters","forward": true, "extend": true} },
+{ "keys": ["shift+alt+u" ], "command":"move", "args": {"by": "lines","forward": false, "extend": true} },
+{ "keys": ["shift+alt+d" ], "command":"move", "args": {"by": "lines","forward": true, "extend": true} },
+
+//移动光标到行首或行末
+{ "keys": ["alt+b"], "command":"move_to", "args": {"to": "bol","extend": false} },
+{ "keys": ["alt+e"], "command":"move_to", "args": {"to": "eol","extend": false} },
+{ "keys": ["shift+alt+b"], "command":"move_to", "args": {"to": "bol","extend": true} },
+{ "keys": ["shift+alt+e"], "command":"move_to", "args": {"to": "eol","extend": true} },
+
+//滚屏
+{ "keys": ["alt+g"], "command":"scroll_lines", "args": {"amount": 1.0 } },
+{ "keys": ["alt+h"], "command":"scroll_lines", "args": {"amount": -1.0 } },
+
+//缩进
+{ "keys": ["shift+tab"], "command":"unindent" },
+
+]
+
+//=======================系统自带快捷键=======================//
+//=============选择=============//
+// Ctrl+L
+// 选择整行(按住-继续选择下行)
+
+//Ctrl+Shift+L
+//鼠标选中多行，按下 同时编辑这些行
+
+//鼠标中键
+//拖动，选择多行
+
+//Ctrl+左键点击
+//同时选中多个节点进行编辑
+
+//Ctrl+M
+// 光标移动至括号内开始或结束的位置
+
+// Ctrl+Shift+M
+// 选择括号内的内容(按住-继续选择父括号)
+
+//=============窗口=============//
+// SHIFT+ALT+数字
+// 分割窗口
+
+
+//=============行处理=============//
+// CTRL+J
+// 合并行JOIN
+
+// Ctrl+KU
+// 改为大写
+
+// Ctrl+KL
+// 改为小写
+
+// Ctrl+KK
+// 从光标处删除至行尾
+
+// Ctrl+Shift+D
+// 复制光标所在整行，插入在该行之前
+
+// Ctrl+J
+// 合并行(已选择需要合并的多行时)
+
+// Ctrl+/
+// 注释整行(如已选择内容，同“Ctrl+Shift+/”效果)
+
+// Ctrl+Shift+/
+// 注释已选择内容
+
+// Ctrl+Shift+V
+// 粘贴并自动缩进(其它兄弟写的，实测win系统自动缩进无效)
+
+// Ctrl+M
+// 光标跳至对应的括号
+
+// Alt+.
+// 闭合当前标签
+
+// Ctrl+Shift+A
+// 选择光标位置父标签对儿
+
+// Ctrl+Shift+[
+// 折叠代码
+
+// Ctrl+Shift+]
+// 展开代码
+
+// Ctrl+KT
+// 折叠属性
+
+// Ctrl+K0
+// 展开所有
+
+// Ctrl+U
+// 软撤销
+
+// Ctrl+T
+// 词互换
+
+// Ctrl+Enter
+// 插入行后
+
+// Ctrl+Shift Enter
+// 插入行前
+
+// Ctrl+K Backspace
+// 从光标处删除至行首
+
+// Shift+Tab
+// 去除缩进
+
+// Tab
+// 缩进
+
+// F9
+// 行排序(按a-z)

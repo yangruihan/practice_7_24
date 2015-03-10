@@ -1,0 +1,11 @@
+Lisp定义函数形式：(defun name varlist &rest body)
+变量名字中带星号（*）是全局变量
+
+Emacs快捷键:
+    C-x C-f 创建一个新文件
+    C-c C-q 匹配当前的所有开括号
+    C-c C-c 编译LISP
+    C-c C-z | C-x b 切换到REPL
+    C-x C-s 保存
+    在REPL中按,并输入quit | sayoonara 回车，这将退出Lisp并且关闭所有SLIME创建的缓冲区，包括REPL缓冲区。
+    

@@ -127,3 +127,84 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 		它还认为如果两个字符只是大小写上有区别，那么它们就是等价的。
 		只要数字表示相同数学意义上的值，它们也是等价的。
 		因此 (equalp 1 1.0) 值为真。
+
+函数：
+	函数定义：
+	(defun name (parameter*)
+		"Optional documentation string."
+		boby-form*)
+	
+	任何符号都可用作函数名。通常函数名仅包含字典符和连字符，但是在特定的命名约定里，其他字符也允许使用。
+
+	如果一个字符串紧跟在形参列表之后，那么它应该是一个用来描述函数用途的文档字符串。当定义函数时，该文档字符串将被关联到函数名上，并且以后可以通过 DOCUMENTATION 函数来获取。
+	例如：(documentation 'foo 'function) 将返回 foo 的文档字符串。
+
+	一个 DEFUN 的主体可由任意数量的 Lisp 表达式所构成，它们将在函数被调用时依次求值，而最后一个表达式的值将被作为整个函数的值返回。另外 RETURN-FROM 特殊操作符可用于从函数的任何位置立即返回。
+
+	一个复杂的函数示例：
+	(defun verbose-sum (x y)
+		"Sum any two numbers after printing a message."
+		(format t "Summing ~d and ~d.~%" x y)
+		(+ x y))
+
+	可选形参：
+		为了定义一个带有可选形参的函数，在必要形参的名字之后放置符号 &optional ，后接可选形参的名字。
+		如：(defun foo (a b &optional c d) (list a b c d))
+		调用结果：
+			(foo 1 2) 			→		(1 2 NIL NIL)
+			(foo 1 2 3) 		→ 	(1 2 3 NIL)
+			(foo 1 2 3 4)		→ 	(1 2 3 4)
+
+		如果想用一个特定的值来指定为默认值，则可以用一个表达式来实现：
+		(defun foo (a &optional (b 10)) (list a b))
+		调用结果：
+			(foo 1 2)				→		(1 2)
+			(foo 1) 				→ 	(1 10)
+
+		如果需要更灵活地选择默认值。比如可能想要基于其他形参来计算默认值。默认值表达式可以引用早先出现在形参列表中的形参。如果要编写一个返回矩形的某种表示的函数，并且想要使它可以特别方便地产生正方形，那么可以使用如下形式：
+		(defun make-rectangle (width &optional (height width)) ...)
+
+		有时，有必要去了解一个可选形参的值究竟是被调用者明确指定还是使用了默认值。可以通过在形参标识符的默认值表达式之后添加另一个变量名来做到，该变量将在调用者实际为该形参提供了一个实参时绑定到真值，否则为 NIL 。通常约定，这种变量的名字与对应的真实形参相同，但带有一个 -supplied-p 后缀，如：
+		(defun foo (a b &optional (c 3 c-supplied-p))
+			(list a b c c-supplied-p))
+		调用结果：
+			(foo 1 2)				→		(1 2 3 NIL)
+			(foo 1 2 3)			→ 	(1 2 3 T)
+			(foo 1 2 4)			→ 	(1 2 4 T)
+
+	剩余形参：
+		Lisp 允许在符号 &rest 之后包括一揽子形参。如果函数带有 &rest 形参，那么任何满足了必要和可选形参之后的其余所有实参就将被收集到一个列表里成为该 &rest 形参的值。 这样，FORMAT 和 + 的形参列表可能看起来会是这样：
+		(defun format (stream string &rest values) ...)
+		(defun + (&rest numbers) ...)
+
+	关键字形参：
+		它允许调用者指定具体形参相应所使用的值。
+		为了使函数带有关键字形参，在任何必要的 &optional 和 &rest 形参之后，可以加上符号 &key 以及任意数量的关键字形参标识符，后者的格式类似于可选形参标识符。
+		如：（只有关键字形参的函数）
+		(defun foo (&key a b c) (list a b c))
+		如果一个给定的关键字没有出现在实参列表中，那么对应的形参将被赋予其默认值，如同可选形参那样。
+		调用结果：
+			(foo)									→ 	(NIL NIL NIL)
+			(foo :a 1)						→ 	(1 NIL NIL)
+			(foo :b 1)						→ 	(NIL 1 NIL)
+			(foo :c 1)						→ 	(NIL NIL 1)
+			(foo :a 1 :c 3)				→ 	(1 NIL 3)
+			(foo :a 1 :b 2 :c 3)	→ 	(1 2 3)
+			(foo :c 3 :a 1 :b 2)	→ 	(1 2 3)
+
+		如同可选形参一样，关键字形参也可以提供一个默认值形式以及一个 -supplied-p 变量名。这个默认值都可以引用早先出现在形参列表中的形参。
+		(defun foo (&key (a 0) (b 0 b-supplied-p) (c (+ a b)))
+			(list a b c b-supplied-p))	
+		调用结果：
+			(foo :a 1)						→		(1 0 1 NIL)
+			(foo :b 1)						→ 	(0 1 1 T)
+			(foo :b 1 :c 4)				→ 	(0 1 4 T)
+			(foo :a 2 :b 1 :c 4)	→ 	(2 1 4 T)
+
+		如果想要让调用者用来指定形参的关键字不同于实际形参名，可以将形参名替换成一个列表，令其含有调用函数时使用的关键字以及用作形参的名字。
+		(defun foo (&key ((:apple a)) ((:box b) 0) ((:charlie c) 0 c-supplied-p))
+			(list a b c c-supplied-p))
+		调用结果：
+			(foo :apple 10 :box 20 :charlie 30)		→ 	(10 20 30 T)
+
+

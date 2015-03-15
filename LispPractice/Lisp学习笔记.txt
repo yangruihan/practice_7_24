@@ -274,4 +274,27 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 	变量的基础知识：
 		Common Lisp 中的变量是一些可以保存值的具名位置。
 
+--------------------2015-3-15--------------------
+
+	全局变量：
+		Common Lisp 提供了两种创建全局变量的方式：
+			1.DEFVAR
+			2.DEFPARAMETER
+			两种形式都接受一个变量名、一个初始值以及一个可选的文档字符串。
+			在被 DEFVAR 和 DEFPARAMETER 定义以后，该名字可用于任何位置来指向全局变量的当前绑定。
+			* 全局变量习惯上被命名为以 *开始和结尾的名字。
+			如：
+			(defvar *count* 0 "Count of widgets made so far.")
+
+			(defparameter *gap-tolerance* 0.001 "Tolerance to be allowed in widget gaps.")
+			区别：
+			DEFPARAMETER 总是将初始值赋给命名的变量，而DEFVAR只有当变量未定义时才这样做。
+			DEFVAR 形式也可以不带初始值来使用，从而在不给定其值的情况下定义一个全局变量。
+			这样的变量称为未绑定的(unbound)。
+			
+			
+
+
+
+
 

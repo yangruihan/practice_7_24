@@ -427,5 +427,56 @@ Emacs快捷键:
 					(b (do-y))
 					(t (do-z)))
 
+	AND、OR 和 NOT(布尔逻辑操作符)：
+		NOT：
+			接受单一参数并对其真值取反，当参数为 NIL 时返回 T，否则返回 NIL。
+		AND 和 OR 则是宏：
+			实现了对任意数量子表达式的逻辑合取和析取操作，并被定义成宏以便支持“短路”特性。
+		如：
+		(not nil) 								→		T
+		(not (= 1 1))							→ 	NIL
+		(and (= 1 2) (= 3 3))			→		NIL
+		(or (= 1 2) (= 3 3))			→ 	T
+
+	循环：
+		DOLIST：
+			在一个列表的元素上循环操作，使用一个依次持有列表中所有后继元素的变量来执行循环体。
+			形如：
+			(dolist (var list-form) body-form*)
+			例如：
+			CL-USER> (dolist (x '(1 2 3)) (print x))
+			1
+			2
+			3
+			NIL
+			在这种方式下，DOLIST 这种形式本身求值为 NIL
+			如果想在列表结束之前中断一个 DOLIST 循环，则可以使用 RETURN 
+			CL-USER> (dolist (x '(1 2 3)) (print x) (if (evenp x)(return)))
+			1
+			2
+			NIL			
+		DOTIMES：
+			用于循环计数的高级循环构造，形如：
+			(dotimes (var count-form) body-form*)
+			其中的 count-form 必须要能求值为一个整数。通过每次循环，var 所持有的整数依次为从 0 到比那个数小 1 的每一个后继整数。
+			如：
+			CL-USER> (dotimes (i 4) (print i))
+			0
+			1
+			2
+			3
+			NIL
+
+		小应用(输出9*9乘法表)：
+		(dotimes (i 9)
+			(dotimes (j 9)
+				(format t "~3d * ~d = ~3d " (+ 1 i) (+ 1 j) (* (+ 1 i) (+ 1 j))))
+			(format t "~%"))
+
+
+
+
+
+			
 
 

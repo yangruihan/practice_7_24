@@ -25,7 +25,8 @@ Emacs快捷键:
 也可以使用",@"在列表的中间插入东西
 `(and ,@(list 1 2 3) 4)     →  (AND 1 2 3 4)
 
-MACROEXPAND-1函数：
+**MACROEXPAND-1函数：
+
 	传入macroexpand-1一个代表宏调用的形式，它将使用适当的参数来调用宏代码并返回其展开式。
 	如：CL-USER> (macroexpand-1 '(where :title "Give Us a Break" :ripped t))
 	#'(LAMBDA (CD)
@@ -33,12 +34,14 @@ MACROEXPAND-1函数：
 			 (EQUAL (GETF CD :RIPPED) T)))
 	T
 
-S-表达式：
-S-表达式的基本元素是列表（list）和原子（atom）。
+**S-表达式：
 
-注释以";"开始，直到一行的结尾，本质上将当作空白来处理。
+	S-表达式的基本元素是列表（list）和原子（atom）。
 
-数字：
+	注释以";"开始，直到一行的结尾，本质上将当作空白来处理。
+
+**数字：
+
 	123		; 整数一百二十三
 	3/7		; 比值七分之三
 	1.0		; 默认精度的浮点数一
@@ -51,7 +54,8 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 	-2/8 	; 负四分之一的另一种写法
 	246/2 	; 整数一百二十三的另一种写法
 
-字符串：
+**字符串：
+
 	两个在字符串中必须被转义的字符是双引号和反斜杠本身。
 	"foo"	; 含有f、o和o的字符串
 	"fo\o"	; 同一个字符串
@@ -59,7 +63,8 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 	"fo\"o"	; 含有f、o、"和o的字符串
 
 
-名字：
+**名字：
+
 	几乎任何字符都可以出现在一个名字里，不过空白字符除外，因为列表的元素是用空格来分隔的。
 	有十个字符被用于其他句法目的而不能出现在名字里，它们是：开括号和闭括号([])、双引号和单引号(""、'')、反引号(`)、逗号(,)、冒号(:)、分号(;)、反斜杠(\)以及竖线(|)。
 	而就算这些字符，如果你愿意的话，它们也能成为名字的一部分，只需将他们用反斜杠进行转义，或是将含有需要转义的字符名字用竖线包起来。
@@ -74,7 +79,8 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 
 	语言标准所定义的名字只是用字母表字符(A-Z)外加*、+、-、/、1、2、<、=、>以及&
 
-简单的S-表达式示例：
+**简单的S-表达式示例：
+
 	x 					; 符号X
 	() 					; 空列表
 	(1 2 3)				; 三个数字所组成的列表
@@ -86,10 +92,12 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 		(format t "hello, world")) 
 	; 由两个符号、空列表和一个列表——其本身又含两个符号和一个字符串所组成的列表
 
-函数调用：
+**函数调用：
+
 	(function-name argument*)
 
-特殊操作符：
+**特殊操作符：
+
 	(1)IF：
 		(if test-form then-form [else-form])
 		其中test-form是条件，then-form是条件值为真时求值的表达式，else-form是条件值为假时求值的表达式。
@@ -105,7 +113,8 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 		如：(let ((x 10)) x)
 		求值得到10，因为在第二个x的求值环境中，它是由 LET 赋值为10的变量名。
 
-真、假和等价：
+**真、假和等价：
+
 	符号 NIL 是唯一的假值，其他所有的都是真值。
 	符号 T 是标准的真值，可用于需要返回一个非 NIL 值却又没有其他值可用的情况。
 	关于 NIL 它是唯一一个既是原子（atom）又是列表（list）的对象，除了用来表示假以外，它还用来表示空列表。
@@ -128,7 +137,8 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 		只要数字表示相同数学意义上的值，它们也是等价的。
 		因此 (equalp 1 1.0) 值为真。
 
-函数：
+**函数：
+
 	函数定义：
 	(defun name (parameter*)
 		"Optional documentation string."
@@ -266,7 +276,8 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 
 --------------------2015-3-11--------------------
 
-变量：
+**变量：
+
 	Common Lisp 支持两种类型的变量：词法(lexical)变量和动态(dynamic)变量。
 	这两种变量分别对应于其他语言中的局部变量和全局变量(大致相似)。
 	*动态变量有时也称为特殊变量(special variable)
@@ -379,3 +390,42 @@ S-表达式的基本元素是列表（list）和原子（atom）。
 			它将值向左侧移动而不轮换它们：
 			(shiftf a b 10) ; 将 b 的值赋给 a ，将 10 赋值给 b
 			* 等价于(let ((tmp a)) (setf a b b 10) tmp)
+
+**宏：标准控制构造
+
+	WHEN 和 UNLESS：
+		* 特殊操作符 PROGN 可以按顺序执行任意数量的形式并返回最后一个形式的值。
+
+		(if (spam-p current-message)
+			(progn 
+				(file-in-spam-folder current-message)
+				(update-spam-database current-message)))
+		等价于：
+		(when (spam-p current-message)
+			(file-in-spam-folder current-message)
+			(update-spam-database current-message))
+		* 如果 WHEN 没有被内置到标准库中，可以像下面这样用一个宏来自己定义 WHEN：
+		(defmacro when (condition &rest body)
+			`(if ,condition (progn ,@body)))
+
+		与 WHEN 宏同一个系列的另一个宏是 UNLESS， 它取相反的条件，只有当条件为假时才求值其形式体，相当于：
+		(defmacro unless (condition &rest body)
+			`(if (not ,condition) (progn ,@body)))
+
+	COND：
+		用于表达多重分支条件的宏 COND，它的基本结构：
+		(cond
+			(test-1 form*)
+				.
+				.
+				.
+			(test-N form*))
+		主体中的每个元素都代表一个条件分支，并由一个列表所构成，列表中含有一个条件形式，以及零或多个当该分支被选择时将被求值的形式。
+		习惯上，那个用来表示 if/else-if 链中最后一个 else 子句的分支将被写成带有条件T。虽然任何非 NIL 的值都可以使用，但在阅读代码时， T 标记确实有用。
+		如：
+		(cond (a (do-x))
+					(b (do-y))
+					(t (do-z)))
+
+
+

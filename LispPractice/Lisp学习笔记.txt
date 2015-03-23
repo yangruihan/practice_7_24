@@ -162,14 +162,14 @@ Emacs快捷键:
 		如：(defun foo (a b &optional c d) (list a b c d))
 		调用结果：
 			(foo 1 2) 			→		(1 2 NIL NIL)
-			(foo 1 2 3) 		→ 	(1 2 3 NIL)
-			(foo 1 2 3 4)		→ 	(1 2 3 4)
+			(foo 1 2 3) 		→ 		(1 2 3 NIL)
+			(foo 1 2 3 4)		→ 		(1 2 3 4)
 
 		如果想用一个特定的值来指定为默认值，则可以用一个表达式来实现：
 		(defun foo (a &optional (b 10)) (list a b))
 		调用结果：
 			(foo 1 2)				→		(1 2)
-			(foo 1) 				→ 	(1 10)
+			(foo 1) 				→		(1 10)
 
 		如果需要更灵活地选择默认值。比如可能想要基于其他形参来计算默认值。默认值表达式可以引用早先出现在形参列表中的形参。如果要编写一个返回矩形的某种表示的函数，并且想要使它可以特别方便地产生正方形，那么可以使用如下形式：
 		(defun make-rectangle (width &optional (height width)) ...)
